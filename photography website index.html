@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prem Jedidiah Thella | Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0b0c;
+    --bg-alt: #131315;
+    --text: #ece8e2;
+    --text-dim: #9a958e;
+    --accent: #c9a26a;
+    --line: #2a2a2c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    letter-spacing:0.02em;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  /* ===== NAV ===== */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:28px 6%;
+    background:linear-gradient(to bottom, rgba(11,11,12,0.85), transparent);
+    transition:background 0.3s ease;
+  }
+  nav.scrolled{background:rgba(11,11,12,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .logo{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.6rem;letter-spacing:0.12em;
+    text-transform:uppercase;
+  }
+  .logo span{color:var(--accent);}
+  .nav-links{display:flex;gap:40px;font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;}
+  .nav-links a{position:relative;padding-bottom:4px;transition:color 0.3s;}
+  .nav-links a:hover{color:var(--accent);}
+  .nav-links a::after{
+    content:'';position:absolute;bottom:0;left:0;width:0;height:1px;
+    background:var(--accent);transition:width 0.3s ease;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-toggle{display:none;font-size:1.5rem;cursor:pointer;background:none;border:none;color:var(--text);}
+
+  /* ===== HERO ===== */
+  .hero{
+    height:100vh;min-height:640px;
+    display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+    padding:0 6%;position:relative;
+    background:
+      radial-gradient(ellipse at 70% 30%, rgba(201,162,106,0.10), transparent 60%),
+      linear-gradient(180deg, rgba(11,11,12,0.4), rgba(11,11,12,0.95)),
+      url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop');
+    background-size:cover;background-position:center;
+  }
+  .hero-eyebrow{
+    font-size:0.8rem;letter-spacing:0.35em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:24px;
+    opacity:0;animation:fadeUp 1s ease 0.2s forwards;
+  }
+  .hero h1{
+    font-size:clamp(3rem, 9vw, 7rem);
+    line-height:1.05;
+    max-width:14ch;
+    opacity:0;animation:fadeUp 1s ease 0.4s forwards;
+  }
+  .hero h1 em{font-style:italic;color:var(--accent);}
+  .hero p{
+    margin-top:24px;max-width:46ch;color:var(--text-dim);font-size:1.05rem;
+    opacity:0;animation:fadeUp 1s ease 0.6s forwards;
+  }
+  .hero-meta{
+    margin-top:48px;display:flex;gap:48px;flex-wrap:wrap;
+    opacity:0;animation:fadeUp 1s ease 0.8s forwards;
+  }
+  .hero-meta div{font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);}
+  .hero-meta strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:500;color:var(--text);text-transform:none;letter-spacing:0;}
+
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(24px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .scroll-cue{
+    position:absolute;bottom:36px;left:6%;
+    font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-dim);
+    display:flex;align-items:center;gap:14px;
+  }
+  .scroll-cue::after{
+    content:'';width:1px;height:50px;background:var(--text-dim);
+    animation:scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine{
+    0%,100%{transform:scaleY(1);opacity:0.4;}
+    50%{transform:scaleY(0.5);opacity:1;}
+  }
+
+  /* ===== SECTION SHARED ===== */
+  section{padding:120px 6%;}
+  .section-head{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    margin-bottom:60px;flex-wrap:wrap;gap:20px;
+    border-bottom:1px solid var(--line);padding-bottom:30px;
+  }
+  .section-head .label{
+    font-size:0.8rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);
+    margin-bottom:12px;display:block;
+  }
+  .section-head h2{font-size:clamp(2rem,5vw,3.2rem);}
+  .section-head p{color:var(--text-dim);max-width:36ch;}
+
+  /* ===== GALLERY ===== */
+  .filters{
+    display:flex;gap:12px;margin-bottom:40px;flex-wrap:wrap;
+  }
+  .filter-btn{
+    background:none;border:1px solid var(--line);color:var(--text-dim);
+    padding:10px 24px;font-family:'Jost',sans-serif;font-size:0.8rem;
+    letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;
+    transition:all 0.3s ease;
+  }
+  .filter-btn:hover, .filter-btn.active{
+    border-color:var(--accent);color:var(--accent);
+  }
+  .gallery-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:20px;
+  }
+  .gallery-item{
+    position:relative;overflow:hidden;aspect-ratio:4/5;
+    cursor:pointer;background:var(--bg-alt);
+  }
+  .gallery-item img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform 0.7s ease, filter 0.7s ease;
+    filter:grayscale(15%) brightness(0.92);
+  }
+  .gallery-item:hover img{transform:scale(1.06);filter:grayscale(0%) brightness(1);}
+  .gallery-overlay{
+    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+    padding:24px;
+    background:linear-gradient(to top, rgba(0,0,0,0.75), transparent 60%);
+    opacity:0;transition:opacity 0.4s ease;
+  }
+  .gallery-item:hover .gallery-overlay{opacity:1;}
+  .gallery-overlay .tag{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  .gallery-overlay h4{font-size:1.3rem;}
+  .gallery-item.hidden{display:none;}
+
+  /* ===== SERVICES ===== */
+  .services-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:1px;background:var(--line);border:1px solid var(--line);
+  }
+  .service-card{
+    background:var(--bg);padding:48px 36px;transition:background 0.3s ease;
+  }
+  .service-card:hover{background:var(--bg-alt);}
+  .service-num{font-family:'Cormorant Garamond',serif;font-size:0.9rem;color:var(--accent);letter-spacing:0.2em;margin-bottom:24px;display:block;}
+  .service-card h3{font-size:1.6rem;margin-bottom:14px;}
+  .service-card p{color:var(--text-dim);font-size:0.95rem;}
+
+  /* ===== PRICING ===== */
+  .pricing-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:24px;
+  }
+  .price-card{
+    border:1px solid var(--line);padding:48px 36px;
+    display:flex;flex-direction:column;
+    transition:border-color 0.3s ease, transform 0.3s ease;
+  }
+  .price-card:hover{border-color:var(--accent);transform:translateY(-6px);}
+  .price-card.featured{
+    background:var(--bg-alt);border-color:var(--accent);
+    position:relative;
+  }
+  .price-card.featured::before{
+    content:'Most Booked';
+    position:absolute;top:-1px;right:24px;
+    background:var(--accent);color:var(--bg);
+    font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;
+    padding:6px 14px;
+  }
+  .price-tier{font-size:0.8rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
+  .price-card h3{font-size:1.8rem;margin-bottom:8px;}
+  .price-amount{font-family:'Cormorant Garamond',serif;font-size:2.6rem;margin:20px 0;}
+  .price-amount span{font-size:1rem;color:var(--text-dim);font-family:'Jost',sans-serif;}
+  .price-card ul{list-style:none;margin:24px 0;flex-grow:1;}
+  .price-card li{
+    padding:10px 0;border-top:1px solid var(--line);
+    color:var(--text-dim);font-size:0.92rem;
+    display:flex;align-items:center;gap:10px;
+  }
+  .price-card li::before{content:'—';color:var(--accent);}
+  .price-cta{
+    display:block;text-align:center;padding:14px;
+    border:1px solid var(--accent);color:var(--accent);
+    font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;
+    transition:all 0.3s ease;margin-top:10px;
+  }
+  .price-cta:hover{background:var(--accent);color:var(--bg);}
+  .price-card.featured .price-cta{background:var(--accent);color:var(--bg);}
+  .price-card.featured .price-cta:hover{background:transparent;color:var(--accent);}
+
+  /* ===== ABOUT ===== */
+  .about-grid{
+    display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:center;
+  }
+  .about-img{
+    aspect-ratio:3/4;background:var(--bg-alt);overflow:hidden;
+  }
+  .about-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(20%);}
+  .about-content p{color:var(--text-dim);margin-bottom:20px;font-size:1.02rem;}
+  .stats-row{display:flex;gap:48px;margin-top:40px;flex-wrap:wrap;}
+  .stat strong{display:block;font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--accent);}
+  .stat span{font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);}
+
+  /* ===== CONTACT ===== */
+  .contact-wrap{
+    display:grid;grid-template-columns:1fr 1.2fr;gap:60px;
+  }
+  .contact-info h3{font-size:1.6rem;margin-bottom:20px;}
+  .contact-info p{color:var(--text-dim);margin-bottom:30px;}
+  .contact-detail{margin-bottom:24px;}
+  .contact-detail .label{font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block;}
+  .contact-detail a, .contact-detail span{font-size:1.05rem;}
+  .social-links{display:flex;gap:24px;margin-top:36px;}
+  .social-links a{
+    font-size:0.8rem;letter-spacing:0.2em;text-transform:uppercase;
+    padding-bottom:6px;border-bottom:1px solid var(--line);transition:border-color 0.3s, color 0.3s;
+  }
+  .social-links a:hover{color:var(--accent);border-color:var(--accent);}
+
+  form{display:flex;flex-direction:column;gap:22px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .field{display:flex;flex-direction:column;gap:8px;}
+  .field label{font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--text-dim);}
+  .field input, .field select, .field textarea{
+    background:transparent;border:none;border-bottom:1px solid var(--line);
+    color:var(--text);font-family:'Jost',sans-serif;font-size:1rem;
+    padding:10px 2px;outline:none;transition:border-color 0.3s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--accent);}
+  .field select{cursor:pointer;}
+  .field select option{background:var(--bg-alt);color:var(--text);}
+  .field textarea{resize:vertical;min-height:100px;}
+  .submit-btn{
+    margin-top:10px;background:var(--accent);color:var(--bg);border:none;
+    padding:16px;font-family:'Jost',sans-serif;font-size:0.85rem;letter-spacing:0.25em;
+    text-transform:uppercase;cursor:pointer;transition:all 0.3s ease;
+    align-self:flex-start;padding-left:40px;padding-right:40px;
+  }
+  .submit-btn:hover{background:transparent;color:var(--accent);border:1px solid var(--accent);}
+
+  /* ===== FOOTER ===== */
+  footer{
+    border-top:1px solid var(--line);padding:50px 6%;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;
+    color:var(--text-dim);font-size:0.85rem;
+  }
+  footer .logo{font-size:1.2rem;}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:860px){
+    .nav-links{
+      position:fixed;top:0;right:-100%;width:70%;height:100vh;
+      background:var(--bg-alt);flex-direction:column;justify-content:center;
+      gap:36px;transition:right 0.4s ease;border-left:1px solid var(--line);
+    }
+    .nav-links.open{right:0;}
+    .nav-toggle{display:block;}
+    .about-grid, .contact-wrap{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .about-img{order:-1;max-width:320px;}
+    section{padding:80px 6%;}
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#" class="logo">PREM Jedidiah<span>.</span>T</a>
+  <div class="nav-links" id="navLinks">
+    <a href="#work">Work</a>
+    <a href="#services">Services</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <span class="hero-eyebrow">Hyderabad · Freelance Photographer</span>
+  <h1>Stories told<br>through <em>light</em><br>and stillness.</h1>
+  <p>Six years behind the lens — portraits, travel, candid moments and events captured with quiet intention. Based in Hyderabad, available across India.</p>
+  <div class="hero-meta">
+    <div><strong>6+</strong>Years Experience</div>
+    <div><strong>200+</strong>Sessions Shot</div>
+    <div><strong>4</strong>Specialisations</div>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</header>
+
+<!-- GALLERY -->
+<section id="work">
+  <div class="section-head">
+    <div>
+      <span class="label">Selected Work</span>
+      <h2>The Portfolio</h2>
+    </div>
+    <p>A curated collection across portrait, travel, candid and event photography — each frame chosen for what it doesn't say out loud.</p>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="portrait">Portrait</button>
+    <button class="filter-btn" data-filter="travel">Travel</button>
+    <button class="filter-btn" data-filter="candid">Candid</button>
+    <button class="filter-btn" data-filter="event">Event</button>
+  </div>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-item" data-cat="portrait">
+      <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=800&auto=format&fit=crop" alt="Portrait">
+      <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Quiet Gaze</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="travel">
+      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=800&auto=format&fit=crop" alt="Travel">
+      <div class="gallery-overlay"><span class="tag">Travel</span><h4>Hampi at Dawn</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="candid">
+      <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=800&auto=format&fit=crop" alt="Candid">
+      <div class="gallery-overlay"><span class="tag">Candid</span><h4>Unrehearsed</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="event">
+      <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop" alt="Event">
+      <div class="gallery-overlay"><span class="tag">Event</span><h4>The Reception</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="portrait">
+      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Portrait">
+      <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Window Light</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="travel">
+      <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=800&auto=format&fit=crop" alt="Travel">
+      <div class="gallery-overlay"><span class="tag">Travel</span><h4>Backwater Mist</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="candid">
+      <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop" alt="Candid">
+      <div class="gallery-overlay"><span class="tag">Candid</span><h4>Street Frame</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="event">
+      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="Event">
+      <div class="gallery-overlay"><span class="tag">Event</span><h4>First Dance</h4></div>
+    </div>
+    <div class="gallery-item" data-cat="portrait">
+      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop" alt="Portrait">
+      <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Soft Focus</h4></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="background:var(--bg-alt);">
+  <div class="section-head">
+    <div>
+      <span class="label">What I Offer</span>
+      <h2>Services</h2>
+    </div>
+    <p>From intimate portrait sessions to full-day event coverage — tailored to how you want to be remembered.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <span class="service-num">01</span>
+      <h3>Portrait Sessions</h3>
+      <p>Studio or natural light portraits — individual, couple, or professional headshots with a focus on natural expression.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">02</span>
+      <h3>Travel Photography</h3>
+      <p>Documentary-style coverage of places and journeys, capturing texture, light and the feeling of being there.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">03</span>
+      <h3>Candid Coverage</h3>
+      <p>Unposed, observational photography for personal projects, lifestyle shoots, and editorial work.</p>
+    </div>
+    <div class="service-card">
+      <span class="service-num">04</span>
+      <h3>Event Photography</h3>
+      <p>Weddings, engagements, corporate functions and celebrations — full-day coverage with edited highlights.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-head">
+    <div>
+      <span class="label">Investment</span>
+      <h2>Packages</h2>
+    </div>
+    <p>Straightforward pricing in INR. Custom packages available on request for multi-day or destination shoots.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <span class="price-tier">Essential</span>
+      <h3>Portrait Session</h3>
+      <div class="price-amount">₹5,000 <span>/ session</span></div>
+      <ul>
+        <li>1–2 hour session</li>
+        <li>One location</li>
+        <li>25+ edited photos</li>
+        <li>Online gallery delivery</li>
+        <li>7-day turnaround</li>
+      </ul>
+      <a href="#contact" class="price-cta">Book This</a>
+    </div>
+    <div class="price-card featured">
+      <span class="price-tier">Signature</span>
+      <h3>Half-Day Coverage</h3>
+      <div class="price-amount">₹15,000 <span>/ shoot</span></div>
+      <ul>
+        <li>Up to 4 hours coverage</li>
+        <li>Multiple locations</li>
+        <li>75+ edited photos</li>
+        <li>Online gallery + downloads</li>
+        <li>5-day turnaround</li>
+        <li>Travel within Hyderabad included</li>
+      </ul>
+      <a href="#contact" class="price-cta">Book This</a>
+    </div>
+    <div class="price-card">
+      <span class="price-tier">Complete</span>
+      <h3>Full-Day Event</h3>
+      <div class="price-amount">₹30,000 <span>/ day</span></div>
+      <ul>
+        <li>Up to 8 hours coverage</li>
+        <li>Full event documentation</li>
+        <li>150+ edited photos</li>
+        <li>Highlight reel selection</li>
+        <li>10-day turnaround</li>
+        <li>Second shooter on request</li>
+      </ul>
+      <a href="#contact" class="price-cta">Book This</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background:var(--bg-alt);">
+  <div class="about-grid">
+    <div class="about-img">
+      <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=800&auto=format&fit=crop" alt="Prem Jedidiah Thella">
+    </div>
+    <div class="about-content">
+      <span class="label">About</span>
+      <h2 style="margin:14px 0 20px;font-size:clamp(1.8rem,4vw,2.6rem);">Hi, I'm Prem.</h2>
+      <p>I'm a freelance photographer based in Hyderabad, Telangana, with over six years of experience across portrait, travel, candid and event photography. My approach favours natural light, genuine moments and a quiet, observational style over heavily directed shoots.</p>
+      <p>I've held leadership roles in photography communities including KL Samyak and Surabhi, where I helped mentor emerging photographers and organise collaborative shoots. Today, I work with individuals, couples and organisations across India who want photography that feels honest rather than staged.</p>
+      <div class="stats-row">
+        <div class="stat"><strong>6+</strong><span>Years Shooting</span></div>
+        <div class="stat"><strong>200+</strong><span>Projects</span></div>
+        <div class="stat"><strong>2</strong><span>Communities Led</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-head">
+    <div>
+      <span class="label">Get In Touch</span>
+      <h2>Let's Work Together</h2>
+    </div>
+    <p>Have a date in mind, or just exploring options? Send a few details and I'll get back to you within a day.</p>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <h3>Contact Details</h3>
+      <p>Based in Hyderabad, Telangana — available for travel across India for the right project.</p>
+      <div class="contact-detail">
+        <span class="label">Email</span>
+        <a href="mailto:cherrythecreator0124gmail.com">cherrythecreator0124gmail.com</a>
+      </div>
+      <div class="contact-detail">
+        <span class="label">Phone</span>
+        <span>+91 90000 00000</span>
+      </div>
+      <div class="contact-detail">
+        <span class="label">Location</span>
+        <span>Hyderabad, Telangana, India</span>
+      </div>
+      <div class="social-links">
+        <a href="https://www.instagram.com/the_jedidiah_/" target="_blank">Instagram</a>
+        <a href="https://www.linkedin.com/in/thellapremjedidiah/" target="_blank">LinkedIn</a>
+      </div>
+    </div>
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="form-row">
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="service">Service</label>
+          <select id="service" name="service">
+            <option>Portrait Session</option>
+            <option>Travel Photography</option>
+            <option>Candid Coverage</option>
+            <option>Event Photography</option>
+            <option>Custom / Not Sure Yet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="date">Preferred Date</label>
+          <input type="date" id="date" name="date">
+        </div>
+      </div>
+      <div class="field">
+        <label for="message">Tell me about your project</label>
+        <textarea id="message" name="message" placeholder="Location, number of people, occasion, anything that helps me prepare..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn">Send Enquiry</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="logo">PREM<span>.</span>K</a>
+  <div>© 2026 Prem Jedidiah Photography. All rights reserved.</div>
+</footer>
+
+<script>
+  // Navbar background on scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Gallery filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      galleryItems.forEach(item => {
+        item.classList.toggle('hidden', filter !== 'all' && item.dataset.cat !== filter);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
