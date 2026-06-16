@@ -26,6 +26,22 @@
     line-height:1.6;
     overflow-x:hidden;
   }
+
+  /* ===== 3D TILT SYSTEM ===== */
+  .tilt{
+    transform-style:preserve-3d;
+    transition:transform 0.15s ease-out, box-shadow 0.3s ease;
+    will-change:transform;
+  }
+  .tilt-glare{
+    position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at var(--gx,50%) var(--gy,50%), rgba(255,255,255,0.10), transparent 55%);
+    opacity:0;transition:opacity 0.3s ease;
+  }
+  .tilt:hover .tilt-glare{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    .tilt, .tilt-glare, .hero-3d-layer, .hero-frame{transition:none !important;transform:none !important;}
+  }
   h1,h2,h3,h4{
     font-family:'Cormorant Garamond',serif;
     font-weight:500;
@@ -59,36 +75,67 @@
   .nav-links a:hover::after{width:100%;}
   .nav-toggle{display:none;font-size:1.5rem;cursor:pointer;background:none;border:none;color:var(--text);}
 
-  /* ===== HERO ===== */
+  /* ===== HERO (3D LAYERED) ===== */
   .hero{
     height:100vh;min-height:640px;
     display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
     padding:0 6%;position:relative;
-    background:
-      radial-gradient(ellipse at 70% 30%, rgba(201,162,106,0.10), transparent 60%),
-      linear-gradient(180deg, rgba(11,11,12,0.4), rgba(11,11,12,0.95)),
-      url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop');
-    background-size:cover;background-position:center;
+    perspective:1400px;
+    overflow:hidden;
+    background:var(--bg);
   }
+  .hero-3d-stage{
+    position:absolute;inset:0;z-index:0;
+    transform-style:preserve-3d;
+  }
+  .hero-3d-layer{
+    position:absolute;inset:0;
+    background-size:cover;background-position:center;
+    transition:transform 0.2s ease-out;
+    will-change:transform;
+  }
+  .hero-layer-bg{
+    background-image:
+      radial-gradient(ellipse at 70% 30%, rgba(201,162,106,0.14), transparent 60%),
+      linear-gradient(180deg, rgba(11,11,12,0.35), rgba(11,11,12,0.97)),
+      url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop');
+    transform:translateZ(-200px) scale(1.18);
+  }
+  .hero-layer-frame{
+    transform:translateZ(-80px) scale(1.07);
+    mix-blend-mode:overlay;
+    opacity:0.5;
+  }
+  .hero-grain{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    opacity:0.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .hero-content{position:relative;z-index:2;transform-style:preserve-3d;transition:transform 0.2s ease-out;}
   .hero-eyebrow{
     font-size:0.8rem;letter-spacing:0.35em;text-transform:uppercase;
     color:var(--accent);margin-bottom:24px;
     opacity:0;animation:fadeUp 1s ease 0.2s forwards;
+    transform:translateZ(40px);
   }
   .hero h1{
     font-size:clamp(3rem, 9vw, 7rem);
     line-height:1.05;
     max-width:14ch;
     opacity:0;animation:fadeUp 1s ease 0.4s forwards;
+    transform:translateZ(60px);
+    text-shadow:0 20px 50px rgba(0,0,0,0.5);
   }
   .hero h1 em{font-style:italic;color:var(--accent);}
   .hero p{
     margin-top:24px;max-width:46ch;color:var(--text-dim);font-size:1.05rem;
     opacity:0;animation:fadeUp 1s ease 0.6s forwards;
+    transform:translateZ(30px);
   }
   .hero-meta{
     margin-top:48px;display:flex;gap:48px;flex-wrap:wrap;
     opacity:0;animation:fadeUp 1s ease 0.8s forwards;
+    transform:translateZ(20px);
   }
   .hero-meta div{font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);}
   .hero-meta strong{display:block;font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:500;color:var(--text);text-transform:none;letter-spacing:0;}
@@ -96,20 +143,6 @@
   @keyframes fadeUp{
     from{opacity:0;transform:translateY(24px);}
     to{opacity:1;transform:translateY(0);}
-  }
-
-  .scroll-cue{
-    position:absolute;bottom:36px;left:6%;
-    font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-dim);
-    display:flex;align-items:center;gap:14px;
-  }
-  .scroll-cue::after{
-    content:'';width:1px;height:50px;background:var(--text-dim);
-    animation:scrollLine 2s ease-in-out infinite;
-  }
-  @keyframes scrollLine{
-    0%,100%{transform:scaleY(1);opacity:0.4;}
-    50%{transform:scaleY(0.5);opacity:1;}
   }
 
   /* ===== SECTION SHARED ===== */
@@ -146,13 +179,16 @@
   .gallery-item{
     position:relative;overflow:hidden;aspect-ratio:4/5;
     cursor:pointer;background:var(--bg-alt);
+    perspective:800px;
   }
   .gallery-item img{
     width:100%;height:100%;object-fit:cover;
-    transition:transform 0.7s ease, filter 0.7s ease;
+    transition:transform 0.5s ease, filter 0.7s ease;
     filter:grayscale(15%) brightness(0.92);
+    transform:translateZ(0) scale(1);
   }
-  .gallery-item:hover img{transform:scale(1.06);filter:grayscale(0%) brightness(1);}
+  .gallery-item:hover img{transform:scale(1.1) translateZ(20px);filter:grayscale(0%) brightness(1);}
+  .gallery-item:hover{box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);}
   .gallery-overlay{
     position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
     padding:24px;
@@ -170,10 +206,14 @@
     gap:1px;background:var(--line);border:1px solid var(--line);
   }
   .service-card{
-    background:var(--bg);padding:48px 36px;transition:background 0.3s ease;
+    background:var(--bg);padding:48px 36px;transition:background 0.3s ease, box-shadow 0.3s ease;
+    position:relative;
   }
-  .service-card:hover{background:var(--bg-alt);}
-  .service-num{font-family:'Cormorant Garamond',serif;font-size:0.9rem;color:var(--accent);letter-spacing:0.2em;margin-bottom:24px;display:block;}
+  .service-card:hover{background:var(--bg-alt);box-shadow:0 30px 60px -25px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);}
+  .service-num{
+    font-family:'Cormorant Garamond',serif;font-size:0.9rem;color:var(--accent);letter-spacing:0.2em;margin-bottom:24px;display:block;
+    transform:translateZ(20px);
+  }
   .service-card h3{font-size:1.6rem;margin-bottom:14px;}
   .service-card p{color:var(--text-dim);font-size:0.95rem;}
 
@@ -185,9 +225,10 @@
   .price-card{
     border:1px solid var(--line);padding:48px 36px;
     display:flex;flex-direction:column;
-    transition:border-color 0.3s ease, transform 0.3s ease;
+    transition:border-color 0.3s ease, transform 0.15s ease-out, box-shadow 0.3s ease;
+    position:relative;background:var(--bg);
   }
-  .price-card:hover{border-color:var(--accent);transform:translateY(-6px);}
+  .price-card:hover{border-color:var(--accent);box-shadow:0 40px 70px -25px rgba(0,0,0,0.65);}
   .price-card.featured{
     background:var(--bg-alt);border-color:var(--accent);
     position:relative;
@@ -198,6 +239,7 @@
     background:var(--accent);color:var(--bg);
     font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;
     padding:6px 14px;
+    transform:translateZ(30px);
   }
   .price-tier{font-size:0.8rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
   .price-card h3{font-size:1.8rem;margin-bottom:8px;}
@@ -226,8 +268,11 @@
   }
   .about-img{
     aspect-ratio:3/4;background:var(--bg-alt);overflow:hidden;
+    transition:box-shadow 0.3s ease;
   }
-  .about-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(20%);}
+  .about-img:hover{box-shadow:0 40px 80px -30px rgba(0,0,0,0.7);}
+  .about-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(20%);transition:transform 0.4s ease;}
+  .about-img:hover img{transform:scale(1.05);}
   .about-content p{color:var(--text-dim);margin-bottom:20px;font-size:1.02rem;}
   .stats-row{display:flex;gap:48px;margin-top:40px;flex-wrap:wrap;}
   .stat strong{display:block;font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--accent);}
@@ -309,16 +354,21 @@
 </nav>
 
 <!-- HERO -->
-<header class="hero">
-  <span class="hero-eyebrow">Hyderabad · Freelance Photographer</span>
-  <h1>Stories told<br>through <em>light</em><br>and stillness.</h1>
-  <p>Six years behind the lens — portraits, travel, candid moments and events captured with quiet intention. Based in Hyderabad, available across India.</p>
-  <div class="hero-meta">
-    <div><strong>6+</strong>Years Experience</div>
-    <div><strong>200+</strong>Sessions Shot</div>
-    <div><strong>4</strong>Specialisations</div>
+<header class="hero" id="hero3d">
+  <div class="hero-3d-stage" id="heroStage">
+    <div class="hero-3d-layer hero-layer-bg" id="heroLayerBg"></div>
   </div>
-  <div class="scroll-cue">Scroll</div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Hyderabad · Freelance Photographer</span>
+    <h1>Stories told<br>through <em>light</em><br>and stillness.</h1>
+    <p>Six years behind the lens — portraits, travel, candid moments and events captured with quiet intention. Based in Hyderabad, available across India.</p>
+    <div class="hero-meta">
+      <div><strong>6+</strong>Years Experience</div>
+      <div><strong>200+</strong>Sessions Shot</div>
+      <div><strong>4</strong>Specialisations</div>
+    </div>
+  </div>
 </header>
 
 <!-- GALLERY -->
@@ -340,41 +390,50 @@
   </div>
 
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-item" data-cat="portrait">
+    <div class="gallery-item tilt" data-cat="portrait">
       <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=800&auto=format&fit=crop" alt="Portrait">
       <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Quiet Gaze</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="travel">
+    <div class="gallery-item tilt" data-cat="travel">
       <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=800&auto=format&fit=crop" alt="Travel">
       <div class="gallery-overlay"><span class="tag">Travel</span><h4>Hampi at Dawn</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="candid">
+    <div class="gallery-item tilt" data-cat="candid">
       <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=800&auto=format&fit=crop" alt="Candid">
       <div class="gallery-overlay"><span class="tag">Candid</span><h4>Unrehearsed</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="event">
+    <div class="gallery-item tilt" data-cat="event">
       <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop" alt="Event">
       <div class="gallery-overlay"><span class="tag">Event</span><h4>The Reception</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="portrait">
+    <div class="gallery-item tilt" data-cat="portrait">
       <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Portrait">
       <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Window Light</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="travel">
+    <div class="gallery-item tilt" data-cat="travel">
       <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=800&auto=format&fit=crop" alt="Travel">
       <div class="gallery-overlay"><span class="tag">Travel</span><h4>Backwater Mist</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="candid">
+    <div class="gallery-item tilt" data-cat="candid">
       <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop" alt="Candid">
       <div class="gallery-overlay"><span class="tag">Candid</span><h4>Street Frame</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="event">
+    <div class="gallery-item tilt" data-cat="event">
       <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="Event">
       <div class="gallery-overlay"><span class="tag">Event</span><h4>First Dance</h4></div>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="gallery-item" data-cat="portrait">
+    <div class="gallery-item tilt" data-cat="portrait">
       <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop" alt="Portrait">
       <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Soft Focus</h4></div>
+      <div class="tilt-glare"></div>
     </div>
   </div>
 </section>
@@ -389,25 +448,29 @@
     <p>From intimate portrait sessions to full-day event coverage — tailored to how you want to be remembered.</p>
   </div>
   <div class="services-grid">
-    <div class="service-card">
+    <div class="service-card tilt">
       <span class="service-num">01</span>
       <h3>Portrait Sessions</h3>
       <p>Studio or natural light portraits — individual, couple, or professional headshots with a focus on natural expression.</p>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="service-card">
+    <div class="service-card tilt">
       <span class="service-num">02</span>
       <h3>Travel Photography</h3>
       <p>Documentary-style coverage of places and journeys, capturing texture, light and the feeling of being there.</p>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="service-card">
+    <div class="service-card tilt">
       <span class="service-num">03</span>
       <h3>Candid Coverage</h3>
       <p>Unposed, observational photography for personal projects, lifestyle shoots, and editorial work.</p>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="service-card">
+    <div class="service-card tilt">
       <span class="service-num">04</span>
       <h3>Event Photography</h3>
       <p>Weddings, engagements, corporate functions and celebrations — full-day coverage with edited highlights.</p>
+      <div class="tilt-glare"></div>
     </div>
   </div>
 </section>
@@ -422,7 +485,7 @@
     <p>Straightforward pricing in INR. Custom packages available on request for multi-day or destination shoots.</p>
   </div>
   <div class="pricing-grid">
-    <div class="price-card">
+    <div class="price-card tilt">
       <span class="price-tier">Essential</span>
       <h3>Portrait Session</h3>
       <div class="price-amount">₹3,500 <span>/ session</span></div>
@@ -434,8 +497,9 @@
         <li>7-day turnaround</li>
       </ul>
       <a href="#contact" class="price-cta">Book This</a>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="price-card featured">
+    <div class="price-card featured tilt">
       <span class="price-tier">Signature</span>
       <h3>Half-Day Coverage</h3>
       <div class="price-amount">₹10,000 <span>/ shoot</span></div>
@@ -448,8 +512,9 @@
         <li>Travel within Hyderabad included</li>
       </ul>
       <a href="#contact" class="price-cta">Book This</a>
+      <div class="tilt-glare"></div>
     </div>
-    <div class="price-card">
+    <div class="price-card tilt">
       <span class="price-tier">Complete</span>
       <h3>Full-Day Event</h3>
       <div class="price-amount">₹25,000 <span>/ day</span></div>
@@ -462,6 +527,7 @@
         <li>Second shooter on request</li>
       </ul>
       <a href="#contact" class="price-cta">Book This</a>
+      <div class="tilt-glare"></div>
     </div>
   </div>
 </section>
@@ -583,6 +649,47 @@
       });
     });
   });
+
+  // ===== 3D TILT ON HOVER (cards, gallery, pricing) =====
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.tilt').forEach(el => {
+      const maxTilt = 8;
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rotateY = (x - 0.5) * maxTilt * 2;
+        const rotateX = (0.5 - y) * maxTilt * 2;
+        el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        el.style.setProperty('--gx', `${x * 100}%`);
+        el.style.setProperty('--gy', `${y * 100}%`);
+      });
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+      });
+    });
+
+    // ===== HERO 3D PARALLAX ON MOUSE MOVE =====
+    const heroEl = document.getElementById('hero3d');
+    const heroStage = document.getElementById('heroStage');
+    const heroContent = document.querySelector('.hero-content');
+    if (heroEl && heroStage) {
+      heroEl.addEventListener('mousemove', (e) => {
+        const rect = heroEl.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        heroStage.style.transform = `rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
+        if (heroContent) {
+          heroContent.style.transform = `translateX(${-x * 14}px) translateY(${-y * 10}px)`;
+        }
+      });
+      heroEl.addEventListener('mouseleave', () => {
+        heroStage.style.transform = 'rotateY(0deg) rotateX(0deg)';
+        if (heroContent) heroContent.style.transform = 'translateX(0) translateY(0)';
+      });
+    }
+  }
 </script>
 
 </body>
