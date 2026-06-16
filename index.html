@@ -40,8 +40,55 @@
   }
   .tilt:hover .tilt-glare{opacity:1;}
   @media (prefers-reduced-motion: reduce){
-    .tilt, .tilt-glare, .hero-3d-layer, .hero-frame{transition:none !important;transform:none !important;}
+    .tilt, .tilt-glare, .hero-3d-layer, .hero-frame, .photo-stack-card, .accent-ring, .about-frame{transition:none !important;animation:none !important;transform:none !important;}
   }
+
+  /* ===== HERO PHOTO STACK (3D) ===== */
+  .photo-stack{
+    position:absolute;right:6%;top:50%;
+    width:min(34vw, 380px);height:min(46vw, 480px);
+    transform-style:preserve-3d;
+    z-index:2;
+    display:none;
+  }
+  .photo-stack-card{
+    position:absolute;inset:0;
+    border-radius:2px;overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,0.75);
+    transition:transform 0.2s ease-out;
+    border:1px solid rgba(201,162,106,0.25);
+  }
+  .photo-stack-card img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%) brightness(0.95);}
+  .photo-stack-card:nth-child(1){transform:translateZ(0px) translateX(0) translateY(0) rotate(0deg);}
+  .photo-stack-card:nth-child(2){transform:translateZ(-50px) translateX(34px) translateY(-26px) rotate(4deg);opacity:0.85;}
+  .photo-stack-card:nth-child(3){transform:translateZ(-100px) translateX(-30px) translateY(40px) rotate(-3deg);opacity:0.65;}
+  @media (min-width:980px){ .photo-stack{display:block;} }
+
+  /* ===== ROTATING ACCENT RING ===== */
+  .accent-ring{
+    position:absolute;width:64px;height:64px;
+    border:1px solid var(--accent);border-radius:50%;
+    opacity:0.4;pointer-events:none;
+    animation:ringSpin 14s linear infinite;
+  }
+  .accent-ring::before{
+    content:'';position:absolute;top:-4px;left:50%;width:7px;height:7px;
+    background:var(--accent);border-radius:50%;transform:translateX(-50%);
+  }
+  .section-head{position:relative;}
+  .section-head .accent-ring{right:0;top:-30px;}
+  @keyframes ringSpin{ to{ transform:rotate(360deg); } }
+
+  /* ===== ABOUT PHOTO 3D FRAME ===== */
+  .about-img-wrap{position:relative;transform-style:preserve-3d;}
+  .about-frame{
+    position:absolute;inset:0;
+    border:1px solid var(--accent);
+    transform:translateZ(-40px) translate(18px,18px);
+    transition:transform 0.3s ease;
+    z-index:-1;
+  }
+  .about-img-wrap:hover .about-frame{transform:translateZ(-40px) translate(26px,26px);}
   h1,h2,h3,h4{
     font-family:'Cormorant Garamond',serif;
     font-weight:500;
@@ -111,7 +158,7 @@
     opacity:0.05;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
-  .hero-content{position:relative;z-index:2;transform-style:preserve-3d;transition:transform 0.2s ease-out;}
+  .hero-content{position:relative;z-index:2;transform-style:preserve-3d;transition:transform 0.2s ease-out;max-width:640px;}
   .hero-eyebrow{
     font-size:0.8rem;letter-spacing:0.35em;text-transform:uppercase;
     color:var(--accent);margin-bottom:24px;
@@ -119,9 +166,9 @@
     transform:translateZ(40px);
   }
   .hero h1{
-    font-size:clamp(3rem, 9vw, 7rem);
+    font-size:clamp(3rem, 7vw, 5.6rem);
     line-height:1.05;
-    max-width:14ch;
+    max-width:13ch;
     opacity:0;animation:fadeUp 1s ease 0.4s forwards;
     transform:translateZ(60px);
     text-shadow:0 20px 50px rgba(0,0,0,0.5);
@@ -359,6 +406,11 @@
     <div class="hero-3d-layer hero-layer-bg" id="heroLayerBg"></div>
   </div>
   <div class="hero-grain"></div>
+  <div class="photo-stack" id="photoStack">
+    <div class="photo-stack-card"><img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=600&auto=format&fit=crop" alt="Portrait"></div>
+    <div class="photo-stack-card"><img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=600&auto=format&fit=crop" alt="Travel"></div>
+    <div class="photo-stack-card"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=600&auto=format&fit=crop" alt="Candid"></div>
+  </div>
   <div class="hero-content">
     <span class="hero-eyebrow">Hyderabad · Freelance Photographer</span>
     <h1>Stories told<br>through <em>light</em><br>and stillness.</h1>
@@ -374,6 +426,7 @@
 <!-- GALLERY -->
 <section id="work">
   <div class="section-head">
+    <div class="accent-ring"></div>
     <div>
       <span class="label">Selected Work</span>
       <h2>The Portfolio</h2>
@@ -478,6 +531,7 @@
 <!-- PRICING -->
 <section id="pricing">
   <div class="section-head">
+    <div class="accent-ring"></div>
     <div>
       <span class="label">Investment</span>
       <h2>Packages</h2>
@@ -535,8 +589,11 @@
 <!-- ABOUT -->
 <section id="about" style="background:var(--bg-alt);">
   <div class="about-grid">
-    <div class="about-img">
-      <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=800&auto=format&fit=crop" alt="Prem Jedidiah Thella">
+    <div class="about-img-wrap">
+      <div class="about-frame"></div>
+      <div class="about-img">
+        <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=800&auto=format&fit=crop" alt="Prem Jedidiah Thella">
+      </div>
     </div>
     <div class="about-content">
       <span class="label">About</span>
@@ -674,6 +731,13 @@
     const heroEl = document.getElementById('hero3d');
     const heroStage = document.getElementById('heroStage');
     const heroContent = document.querySelector('.hero-content');
+    const photoStack = document.getElementById('photoStack');
+    const stackCards = photoStack ? photoStack.querySelectorAll('.photo-stack-card') : [];
+    const stackBase = [
+      {z:0, x:0, y:0, r:0},
+      {z:-50, x:34, y:-26, r:4},
+      {z:-100, x:-30, y:40, r:-3}
+    ];
     if (heroEl && heroStage) {
       heroEl.addEventListener('mousemove', (e) => {
         const rect = heroEl.getBoundingClientRect();
@@ -683,10 +747,19 @@
         if (heroContent) {
           heroContent.style.transform = `translateX(${-x * 14}px) translateY(${-y * 10}px)`;
         }
+        stackCards.forEach((card, i) => {
+          const depth = (i + 1) * 14;
+          const b = stackBase[i];
+          card.style.transform = `translateZ(${b.z}px) translateX(${b.x + x * depth}px) translateY(${b.y - y * depth}px) rotate(${b.r}deg)`;
+        });
       });
       heroEl.addEventListener('mouseleave', () => {
         heroStage.style.transform = 'rotateY(0deg) rotateX(0deg)';
         if (heroContent) heroContent.style.transform = 'translateX(0) translateY(0)';
+        stackCards.forEach((card, i) => {
+          const b = stackBase[i];
+          card.style.transform = `translateZ(${b.z}px) translateX(${b.x}px) translateY(${b.y}px) rotate(${b.r}deg)`;
+        });
       });
     }
   }
