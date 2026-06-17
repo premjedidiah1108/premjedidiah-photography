@@ -40,106 +40,8 @@
   }
   .tilt:hover .tilt-glare{opacity:1;}
   @media (prefers-reduced-motion: reduce){
-    .hero-3d-layer, .hero-frame, .accent-ring, .camera-3d, .lens-glass::after, .cam-shadow, .about-cam-3d{animation:none !important;}
-    .cube{transition:transform 0.01s !important;}
-  }
-
-  /* ===== 3D CAMERA MODEL (HERO CENTERPIECE) ===== */
-  .camera-stage{
-    position:absolute;right:8%;top:50%;
-    width:min(38vw, 420px);height:min(38vw, 420px);
-    transform:translateY(-50%);
-    perspective:1600px;
-    z-index:2;
-    display:none;
-  }
-  @media (min-width:980px){ .camera-stage{display:block;} }
-  .camera-3d{
-    position:relative;width:100%;height:100%;
-    transform-style:preserve-3d;
-    animation:cameraFloat 6s ease-in-out infinite;
-    transition:transform 0.25s ease-out;
-  }
-  @keyframes cameraFloat{
-    0%,100%{ transform:translateY(0) rotateX(8deg) rotateY(-18deg); }
-    50%{ transform:translateY(-16px) rotateX(8deg) rotateY(-18deg); }
-  }
-  .cam-part{position:absolute;transform-style:preserve-3d;}
-
-  /* camera body (box built from 6 faces) */
-  .cam-body{width:240px;height:160px;left:50%;top:50%;margin:-80px 0 0 -120px;}
-  .cam-face{position:absolute;background:linear-gradient(145deg,#1c1c1e,#0e0e10);border:1px solid #2e2a22;}
-  .cam-face.front{width:240px;height:160px;transform:translateZ(60px);border-radius:10px;
-    background:linear-gradient(160deg,#222224 0%,#121214 60%,#0a0a0b 100%);
-    box-shadow:inset 0 0 0 1px rgba(201,162,106,0.18), inset 0 30px 60px -20px rgba(255,255,255,0.04);}
-  .cam-face.back{width:240px;height:160px;transform:translateZ(-60px) rotateY(180deg);border-radius:10px;background:#0a0a0b;}
-  .cam-face.left{width:120px;height:160px;left:0;transform:rotateY(-90deg) translateZ(0px);transform-origin:left center;background:#151516;}
-  .cam-face.right{width:120px;height:160px;left:240px;transform:rotateY(90deg) translateZ(0px);transform-origin:right center;background:#151516;}
-  .cam-face.top{width:240px;height:120px;top:0;transform:rotateX(90deg) translateZ(0px);transform-origin:top center;background:#1a1a1c;}
-  .cam-face.bottom{width:240px;height:120px;top:160px;transform:rotateX(-90deg) translateZ(0px);transform-origin:bottom center;background:#0a0a0b;}
-
-  /* lens barrel, stacked rings for depth */
-  .cam-lens{left:50%;top:50%;margin:-65px 0 0 -65px;width:130px;height:130px;transform:translateZ(60px) translateX(-10px);}
-  .lens-ring{
-    position:absolute;border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #2c2c2e, #0c0c0d 70%);
-    border:1px solid #3a352a;
-  }
-  .lens-ring.r1{width:130px;height:130px;transform:translateZ(0px);}
-  .lens-ring.r2{width:110px;height:110px;top:10px;left:10px;transform:translateZ(14px);border-color:#4a4030;}
-  .lens-ring.r3{width:88px;height:88px;top:21px;left:21px;transform:translateZ(28px);
-    background:radial-gradient(circle at 35% 30%, #35302a, #0a0a0b 70%);border-color:var(--accent);border-width:1px;}
-  .lens-glass{
-    position:absolute;width:62px;height:62px;top:34px;left:34px;border-radius:50%;
-    transform:translateZ(42px);
-    background:
-      radial-gradient(circle at 32% 28%, rgba(180,200,230,0.55), rgba(20,25,35,0.9) 45%, rgba(5,5,8,1) 75%);
-    box-shadow:0 0 25px rgba(201,162,106,0.25) inset, 0 0 18px rgba(0,0,0,0.6);
-    overflow:hidden;
-  }
-  .lens-glass::after{
-    content:'';position:absolute;inset:0;border-radius:50%;
-    background:conic-gradient(from 0deg, rgba(201,162,106,0.18), transparent 30%, transparent 60%, rgba(120,160,220,0.15), transparent 90%);
-    animation:lensShine 8s linear infinite;
-  }
-  @keyframes lensShine{ to{ transform:rotate(360deg); } }
-
-  /* viewfinder bump */
-  .cam-viewfinder{
-    width:60px;height:34px;left:50%;top:0;margin-left:-30px;
-    transform:translateZ(35px) translateY(-26px);
-    background:linear-gradient(160deg,#222224,#0e0e10);
-    border-radius:6px 6px 2px 2px;border:1px solid #2e2a22;
-  }
-
-  /* top dials */
-  .cam-dial{
-    width:34px;height:34px;border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #38332a, #15130f 70%);
-    border:1px solid var(--accent);
-    transform:translateZ(35px) translateY(-20px);
-  }
-  .cam-dial.d1{left:36px;top:0;}
-  .cam-dial.d2{left:168px;top:0;}
-
-  /* small grip texture lines */
-  .cam-grip{
-    position:absolute;left:14px;top:40px;width:50px;height:80px;
-    transform:translateZ(60.5px);
-    background:repeating-linear-gradient(135deg, rgba(201,162,106,0.12) 0px, rgba(201,162,106,0.12) 2px, transparent 2px, transparent 8px);
-    border-radius:4px;
-  }
-
-  /* ground shadow beneath the floating camera */
-  .cam-shadow{
-    position:absolute;bottom:-30px;left:50%;width:220px;height:36px;
-    transform:translateX(-50%) translateZ(-200px) rotateX(90deg);
-    background:radial-gradient(ellipse at center, rgba(0,0,0,0.55), transparent 70%);
-    animation:shadowPulse 6s ease-in-out infinite;
-  }
-  @keyframes shadowPulse{
-    0%,100%{ opacity:0.55; }
-    50%{ opacity:0.3; }
+    .hero-3d-layer, .hero-frame, .accent-ring{animation:none !important;}
+    .cube, .price-card{transition:transform 0.01s !important;}
   }
 
   /* ===== ROTATING ACCENT RING ===== */
@@ -168,31 +70,6 @@
   }
   .about-img-wrap:hover .about-frame{transform:translateZ(-40px) translate(26px,26px);}
 
-  /* ===== ABOUT SECTION INTERACTIVE CAMERA BADGE ===== */
-  .about-cam-stage{
-    position:absolute;
-    right:-18px;bottom:-28px;
-    width:140px;height:140px;
-    perspective:900px;
-    z-index:3;
-  }
-  .about-cam-3d{
-    position:relative;width:100%;height:100%;
-    transform-style:preserve-3d;
-    transform:scale(0.42) rotateX(8deg) rotateY(-18deg);
-    transform-origin:center center;
-    transition:transform 0.2s ease-out;
-    cursor:pointer;
-    animation:aboutCamFloat 5s ease-in-out infinite;
-  }
-  @keyframes aboutCamFloat{
-    0%,100%{ transform:scale(0.42) rotateX(8deg) rotateY(-18deg) translateY(0); }
-    50%{ transform:scale(0.42) rotateX(8deg) rotateY(-18deg) translateY(-8px); }
-  }
-  @media (max-width:860px){
-    .about-cam-stage{right:8px;bottom:-20px;width:100px;height:100px;}
-    .about-cam-3d{transform:scale(0.3) rotateX(8deg) rotateY(-18deg);}
-  }
   h1,h2,h3,h4{
     font-family:'Cormorant Garamond',serif;
     font-weight:500;
@@ -415,25 +292,39 @@
   .pricing-grid{
     display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
     gap:28px;
+    align-items:stretch;
   }
   .price-wrap{
-    perspective:1000px;
+    perspective:1200px;
+    display:flex;
+    height:100%;
   }
   .price-card{
     border:1px solid var(--line);padding:48px 36px;border-radius:14px;
     display:flex;flex-direction:column;
-    transition:border-color 0.3s ease, transform 0.15s ease-out, box-shadow 0.3s ease;
+    transition:border-color 0.3s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
     position:relative;background:var(--bg);
     overflow:hidden;
+    min-height:560px;
+    cursor:pointer;
+    transform:scale(1);
+    z-index:1;
+    flex:1;
+    width:100%;
   }
-  .price-card:hover{border-color:var(--accent);box-shadow:0 40px 70px -25px rgba(0,0,0,0.65);}
+  .price-card.selected{
+    border-color:var(--accent);box-shadow:0 50px 90px -25px rgba(0,0,0,0.75);
+    transform:scale(1.18);
+    z-index:5;
+    background:var(--bg-alt);
+  }
   .price-card.featured{
     background:var(--bg-alt);border-color:var(--accent);
     position:relative;
   }
   .price-card.featured::before{
     content:'Most Booked';
-    position:absolute;top:0;right:24px;transform:translateZ(30px);
+    position:absolute;top:0;right:24px;
     background:var(--accent);color:var(--bg);
     font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;
     padding:6px 14px;white-space:nowrap;border-radius:0 0 6px 6px;
@@ -598,29 +489,6 @@
     <div class="hero-3d-layer hero-layer-bg" id="heroLayerBg"></div>
   </div>
   <div class="hero-grain"></div>
-  <div class="camera-stage" id="cameraStage">
-    <div class="camera-3d" id="camera3d">
-      <div class="cam-shadow"></div>
-      <div class="cam-part cam-body">
-        <div class="cam-face back"></div>
-        <div class="cam-face left"></div>
-        <div class="cam-face right"></div>
-        <div class="cam-face top"></div>
-        <div class="cam-face bottom"></div>
-        <div class="cam-face front"></div>
-        <div class="cam-part cam-grip"></div>
-        <div class="cam-part cam-dial d1"></div>
-        <div class="cam-part cam-dial d2"></div>
-        <div class="cam-part cam-viewfinder"></div>
-      </div>
-      <div class="cam-part cam-lens">
-        <div class="lens-ring r1"></div>
-        <div class="lens-ring r2"></div>
-        <div class="lens-ring r3"></div>
-        <div class="lens-glass"></div>
-      </div>
-    </div>
-  </div>
   <div class="hero-content">
     <span class="hero-eyebrow">Hyderabad · Freelance Photographer</span>
     <h1>Stories told<br>through <em>light</em><br>and stillness.</h1>
@@ -787,7 +655,7 @@
   </div>
   <div class="pricing-grid">
     <div class="price-wrap">
-      <div class="price-card tilt">
+      <div class="price-card">
         <span class="price-tier">Essential</span>
         <h3>Portrait Session</h3>
         <div class="price-amount">₹3,500 <span>/ session</span></div>
@@ -799,11 +667,10 @@
           <li>7-day turnaround</li>
         </ul>
         <a href="#contact" class="price-cta">Book This</a>
-        <div class="tilt-glare"></div>
       </div>
     </div>
     <div class="price-wrap">
-      <div class="price-card featured tilt">
+      <div class="price-card featured">
         <span class="price-tier">Signature</span>
         <h3>Half-Day Coverage</h3>
         <div class="price-amount">₹10,000 <span>/ shoot</span></div>
@@ -816,11 +683,10 @@
           <li>Travel within Hyderabad included</li>
         </ul>
         <a href="#contact" class="price-cta">Book This</a>
-        <div class="tilt-glare"></div>
       </div>
     </div>
     <div class="price-wrap">
-      <div class="price-card tilt">
+      <div class="price-card">
         <span class="price-tier">Complete</span>
         <h3>Full-Day Event</h3>
         <div class="price-amount">₹25,000 <span>/ day</span></div>
@@ -833,7 +699,6 @@
           <li>Second shooter on request</li>
         </ul>
         <a href="#contact" class="price-cta">Book This</a>
-        <div class="tilt-glare"></div>
       </div>
     </div>
   </div>
@@ -846,29 +711,6 @@
       <div class="about-frame"></div>
       <div class="about-img">
         <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=800&auto=format&fit=crop" alt="Prem Jedidiah Thella">
-      </div>
-      <div class="about-cam-stage" id="aboutCamStage">
-        <div class="about-cam-3d" id="aboutCam3d">
-          <div class="cam-shadow"></div>
-          <div class="cam-part cam-body">
-            <div class="cam-face back"></div>
-            <div class="cam-face left"></div>
-            <div class="cam-face right"></div>
-            <div class="cam-face top"></div>
-            <div class="cam-face bottom"></div>
-            <div class="cam-face front"></div>
-            <div class="cam-part cam-grip"></div>
-            <div class="cam-part cam-dial d1"></div>
-            <div class="cam-part cam-dial d2"></div>
-            <div class="cam-part cam-viewfinder"></div>
-          </div>
-          <div class="cam-part cam-lens">
-            <div class="lens-ring r1"></div>
-            <div class="lens-ring r2"></div>
-            <div class="lens-ring r3"></div>
-            <div class="lens-glass"></div>
-          </div>
-        </div>
       </div>
     </div>
     <div class="about-content">
@@ -1093,7 +935,22 @@
     });
   });
 
-  // ===== 3D TILT ON HOVER (cards, gallery, pricing) =====
+  // ===== PRICE CARD POP (click/tap to select, any device) =====
+  document.querySelectorAll('.price-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') return;
+      const alreadySelected = card.classList.contains('selected');
+      document.querySelectorAll('.price-card.selected').forEach(c => c.classList.remove('selected'));
+      if (!alreadySelected) card.classList.add('selected');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.price-card')) {
+      document.querySelectorAll('.price-card.selected').forEach(c => c.classList.remove('selected'));
+    }
+  });
+
+  // ===== 3D TILT ON HOVER (cards, gallery) =====
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion && window.matchMedia('(hover: hover)').matches) {
     document.querySelectorAll('.tilt').forEach(el => {
@@ -1117,8 +974,6 @@
     const heroEl = document.getElementById('hero3d');
     const heroStage = document.getElementById('heroStage');
     const heroContent = document.querySelector('.hero-content');
-    const camera3d = document.getElementById('camera3d');
-    const baseRotX = 8, baseRotY = -18;
     if (heroEl && heroStage) {
       heroEl.addEventListener('mousemove', (e) => {
         const rect = heroEl.getBoundingClientRect();
@@ -1128,46 +983,10 @@
         if (heroContent) {
           heroContent.style.transform = `translateX(${-x * 14}px) translateY(${-y * 10}px)`;
         }
-        if (camera3d) {
-          camera3d.style.animationPlayState = 'paused';
-          camera3d.style.transform = `translateY(${-y * 10}px) rotateX(${baseRotX - y * 16}deg) rotateY(${baseRotY + x * 28}deg)`;
-        }
       });
       heroEl.addEventListener('mouseleave', () => {
         heroStage.style.transform = 'rotateY(0deg) rotateX(0deg)';
         if (heroContent) heroContent.style.transform = 'translateX(0) translateY(0)';
-        if (camera3d) {
-          camera3d.style.transform = '';
-          camera3d.style.animationPlayState = 'running';
-        }
-      });
-    }
-
-    // ===== ABOUT SECTION CAMERA BADGE (interactive) =====
-    const aboutCamStage = document.getElementById('aboutCamStage');
-    const aboutCam3d = document.getElementById('aboutCam3d');
-    if (aboutCamStage && aboutCam3d) {
-      const camScale = 0.42;
-      aboutCamStage.addEventListener('mousemove', (e) => {
-        const rect = aboutCamStage.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        aboutCam3d.style.animationPlayState = 'paused';
-        aboutCam3d.style.transform = `scale(${camScale}) rotateX(${8 - y * 30}deg) rotateY(${-18 + x * 50}deg)`;
-      });
-      aboutCamStage.addEventListener('mouseleave', () => {
-        aboutCam3d.style.transform = '';
-        aboutCam3d.style.animationPlayState = 'running';
-      });
-      aboutCamStage.addEventListener('click', () => {
-        aboutCam3d.style.animationPlayState = 'paused';
-        aboutCam3d.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        aboutCam3d.style.transform = `scale(${camScale}) rotateX(8deg) rotateY(${-18 + 360}deg)`;
-        setTimeout(() => {
-          aboutCam3d.style.transition = 'transform 0.2s ease-out';
-          aboutCam3d.style.transform = '';
-          aboutCam3d.style.animationPlayState = 'running';
-        }, 650);
       });
     }
   }
