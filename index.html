@@ -40,29 +40,107 @@
   }
   .tilt:hover .tilt-glare{opacity:1;}
   @media (prefers-reduced-motion: reduce){
-    .tilt, .tilt-glare, .hero-3d-layer, .hero-frame, .photo-stack-card, .accent-ring, .about-frame{transition:none !important;animation:none !important;transform:none !important;}
+    .hero-3d-layer, .hero-frame, .accent-ring, .camera-3d, .lens-glass::after, .cam-shadow, .about-cam-3d{animation:none !important;}
+    .cube{transition:transform 0.01s !important;}
   }
 
-  /* ===== HERO PHOTO STACK (3D) ===== */
-  .photo-stack{
-    position:absolute;right:6%;top:50%;
-    width:min(34vw, 380px);height:min(46vw, 480px);
-    transform-style:preserve-3d;
+  /* ===== 3D CAMERA MODEL (HERO CENTERPIECE) ===== */
+  .camera-stage{
+    position:absolute;right:8%;top:50%;
+    width:min(38vw, 420px);height:min(38vw, 420px);
+    transform:translateY(-50%);
+    perspective:1600px;
     z-index:2;
     display:none;
   }
-  .photo-stack-card{
-    position:absolute;inset:0;
-    border-radius:2px;overflow:hidden;
-    box-shadow:0 40px 90px -30px rgba(0,0,0,0.75);
-    transition:transform 0.2s ease-out;
-    border:1px solid rgba(201,162,106,0.25);
+  @media (min-width:980px){ .camera-stage{display:block;} }
+  .camera-3d{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;
+    animation:cameraFloat 6s ease-in-out infinite;
+    transition:transform 0.25s ease-out;
   }
-  .photo-stack-card img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%) brightness(0.95);}
-  .photo-stack-card:nth-child(1){transform:translateZ(0px) translateX(0) translateY(0) rotate(0deg);}
-  .photo-stack-card:nth-child(2){transform:translateZ(-50px) translateX(34px) translateY(-26px) rotate(4deg);opacity:0.85;}
-  .photo-stack-card:nth-child(3){transform:translateZ(-100px) translateX(-30px) translateY(40px) rotate(-3deg);opacity:0.65;}
-  @media (min-width:980px){ .photo-stack{display:block;} }
+  @keyframes cameraFloat{
+    0%,100%{ transform:translateY(0) rotateX(8deg) rotateY(-18deg); }
+    50%{ transform:translateY(-16px) rotateX(8deg) rotateY(-18deg); }
+  }
+  .cam-part{position:absolute;transform-style:preserve-3d;}
+
+  /* camera body (box built from 6 faces) */
+  .cam-body{width:240px;height:160px;left:50%;top:50%;margin:-80px 0 0 -120px;}
+  .cam-face{position:absolute;background:linear-gradient(145deg,#1c1c1e,#0e0e10);border:1px solid #2e2a22;}
+  .cam-face.front{width:240px;height:160px;transform:translateZ(60px);border-radius:10px;
+    background:linear-gradient(160deg,#222224 0%,#121214 60%,#0a0a0b 100%);
+    box-shadow:inset 0 0 0 1px rgba(201,162,106,0.18), inset 0 30px 60px -20px rgba(255,255,255,0.04);}
+  .cam-face.back{width:240px;height:160px;transform:translateZ(-60px) rotateY(180deg);border-radius:10px;background:#0a0a0b;}
+  .cam-face.left{width:120px;height:160px;left:0;transform:rotateY(-90deg) translateZ(0px);transform-origin:left center;background:#151516;}
+  .cam-face.right{width:120px;height:160px;left:240px;transform:rotateY(90deg) translateZ(0px);transform-origin:right center;background:#151516;}
+  .cam-face.top{width:240px;height:120px;top:0;transform:rotateX(90deg) translateZ(0px);transform-origin:top center;background:#1a1a1c;}
+  .cam-face.bottom{width:240px;height:120px;top:160px;transform:rotateX(-90deg) translateZ(0px);transform-origin:bottom center;background:#0a0a0b;}
+
+  /* lens barrel, stacked rings for depth */
+  .cam-lens{left:50%;top:50%;margin:-65px 0 0 -65px;width:130px;height:130px;transform:translateZ(60px) translateX(-10px);}
+  .lens-ring{
+    position:absolute;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #2c2c2e, #0c0c0d 70%);
+    border:1px solid #3a352a;
+  }
+  .lens-ring.r1{width:130px;height:130px;transform:translateZ(0px);}
+  .lens-ring.r2{width:110px;height:110px;top:10px;left:10px;transform:translateZ(14px);border-color:#4a4030;}
+  .lens-ring.r3{width:88px;height:88px;top:21px;left:21px;transform:translateZ(28px);
+    background:radial-gradient(circle at 35% 30%, #35302a, #0a0a0b 70%);border-color:var(--accent);border-width:1px;}
+  .lens-glass{
+    position:absolute;width:62px;height:62px;top:34px;left:34px;border-radius:50%;
+    transform:translateZ(42px);
+    background:
+      radial-gradient(circle at 32% 28%, rgba(180,200,230,0.55), rgba(20,25,35,0.9) 45%, rgba(5,5,8,1) 75%);
+    box-shadow:0 0 25px rgba(201,162,106,0.25) inset, 0 0 18px rgba(0,0,0,0.6);
+    overflow:hidden;
+  }
+  .lens-glass::after{
+    content:'';position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(201,162,106,0.18), transparent 30%, transparent 60%, rgba(120,160,220,0.15), transparent 90%);
+    animation:lensShine 8s linear infinite;
+  }
+  @keyframes lensShine{ to{ transform:rotate(360deg); } }
+
+  /* viewfinder bump */
+  .cam-viewfinder{
+    width:60px;height:34px;left:50%;top:0;margin-left:-30px;
+    transform:translateZ(35px) translateY(-26px);
+    background:linear-gradient(160deg,#222224,#0e0e10);
+    border-radius:6px 6px 2px 2px;border:1px solid #2e2a22;
+  }
+
+  /* top dials */
+  .cam-dial{
+    width:34px;height:34px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #38332a, #15130f 70%);
+    border:1px solid var(--accent);
+    transform:translateZ(35px) translateY(-20px);
+  }
+  .cam-dial.d1{left:36px;top:0;}
+  .cam-dial.d2{left:168px;top:0;}
+
+  /* small grip texture lines */
+  .cam-grip{
+    position:absolute;left:14px;top:40px;width:50px;height:80px;
+    transform:translateZ(60.5px);
+    background:repeating-linear-gradient(135deg, rgba(201,162,106,0.12) 0px, rgba(201,162,106,0.12) 2px, transparent 2px, transparent 8px);
+    border-radius:4px;
+  }
+
+  /* ground shadow beneath the floating camera */
+  .cam-shadow{
+    position:absolute;bottom:-30px;left:50%;width:220px;height:36px;
+    transform:translateX(-50%) translateZ(-200px) rotateX(90deg);
+    background:radial-gradient(ellipse at center, rgba(0,0,0,0.55), transparent 70%);
+    animation:shadowPulse 6s ease-in-out infinite;
+  }
+  @keyframes shadowPulse{
+    0%,100%{ opacity:0.55; }
+    50%{ opacity:0.3; }
+  }
 
   /* ===== ROTATING ACCENT RING ===== */
   .accent-ring{
@@ -80,15 +158,41 @@
   @keyframes ringSpin{ to{ transform:rotate(360deg); } }
 
   /* ===== ABOUT PHOTO 3D FRAME ===== */
-  .about-img-wrap{position:relative;transform-style:preserve-3d;}
+  .about-img-wrap{position:relative;transform-style:preserve-3d;max-width:380px;margin:0 auto;}
   .about-frame{
     position:absolute;inset:0;
-    border:1px solid var(--accent);
+    border:1px solid var(--accent);border-radius:50%;
     transform:translateZ(-40px) translate(18px,18px);
     transition:transform 0.3s ease;
     z-index:-1;
   }
   .about-img-wrap:hover .about-frame{transform:translateZ(-40px) translate(26px,26px);}
+
+  /* ===== ABOUT SECTION INTERACTIVE CAMERA BADGE ===== */
+  .about-cam-stage{
+    position:absolute;
+    right:-18px;bottom:-28px;
+    width:140px;height:140px;
+    perspective:900px;
+    z-index:3;
+  }
+  .about-cam-3d{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;
+    transform:scale(0.42) rotateX(8deg) rotateY(-18deg);
+    transform-origin:center center;
+    transition:transform 0.2s ease-out;
+    cursor:pointer;
+    animation:aboutCamFloat 5s ease-in-out infinite;
+  }
+  @keyframes aboutCamFloat{
+    0%,100%{ transform:scale(0.42) rotateX(8deg) rotateY(-18deg) translateY(0); }
+    50%{ transform:scale(0.42) rotateX(8deg) rotateY(-18deg) translateY(-8px); }
+  }
+  @media (max-width:860px){
+    .about-cam-stage{right:8px;bottom:-20px;width:100px;height:100px;}
+    .about-cam-3d{transform:scale(0.3) rotateX(8deg) rotateY(-18deg);}
+  }
   h1,h2,h3,h4{
     font-family:'Cormorant Garamond',serif;
     font-weight:500;
@@ -220,60 +324,107 @@
     border-color:var(--accent);color:var(--accent);
   }
   .gallery-grid{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:20px;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:36px 28px;
+    justify-items:center;
+  }
+  .ball-wrap{
+    width:100%;max-width:300px;aspect-ratio:1/1;
+    display:flex;align-items:flex-end;justify-content:center;
   }
   .gallery-item{
-    position:relative;overflow:hidden;aspect-ratio:4/5;
+    position:relative;overflow:hidden;border-radius:50%;
     cursor:pointer;background:var(--bg-alt);
     perspective:800px;
+    width:100%;aspect-ratio:1/1;
+    box-shadow:0 10px 24px -10px rgba(0,0,0,0.5);
+    will-change:transform;
   }
   .gallery-item img{
     width:100%;height:100%;object-fit:cover;
-    transition:transform 0.5s ease, filter 0.7s ease;
+    transition:filter 0.7s ease;
     filter:grayscale(15%) brightness(0.92);
-    transform:translateZ(0) scale(1);
   }
-  .gallery-item:hover img{transform:scale(1.1) translateZ(20px);filter:grayscale(0%) brightness(1);}
+  .gallery-item.bouncing img{filter:grayscale(0%) brightness(1);}
   .gallery-item:hover{box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);}
   .gallery-overlay{
-    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
-    padding:24px;
-    background:linear-gradient(to top, rgba(0,0,0,0.75), transparent 60%);
+    position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+    padding:24px 36px;
+    background:radial-gradient(circle at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 60%, transparent 78%);
     opacity:0;transition:opacity 0.4s ease;
   }
   .gallery-item:hover .gallery-overlay{opacity:1;}
   .gallery-overlay .tag{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
   .gallery-overlay h4{font-size:1.3rem;}
   .gallery-item.hidden{display:none;}
+  .ball-wrap.hidden{display:none;}
 
   /* ===== SERVICES ===== */
   .services-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:1px;background:var(--line);border:1px solid var(--line);
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:32px;
   }
-  .service-card{
-    background:var(--bg);padding:48px 36px;transition:background 0.3s ease, box-shadow 0.3s ease;
-    position:relative;
+  .cube-wrap{
+    aspect-ratio:1/1;
+    perspective:1200px;
+    -webkit-perspective:1200px;
+    filter:drop-shadow(0 18px 30px rgba(0,0,0,0.45));
+    transition:filter 0.4s ease;
   }
-  .service-card:hover{background:var(--bg-alt);box-shadow:0 30px 60px -25px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.04);}
+  .cube-wrap:hover{filter:drop-shadow(0 36px 55px rgba(0,0,0,0.6));}
+  .cube{
+    position:relative;width:100%;height:100%;
+    transform-style:preserve-3d;
+    -webkit-transform-style:preserve-3d;
+    transition:transform 0.7s cubic-bezier(0.4,0.1,0.2,1);
+    cursor:pointer;
+  }
+  .cube-wrap:hover .cube, .cube-wrap.flipped .cube{transform:rotateY(180deg);}
+  .cube-face{
+    position:absolute;inset:0;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    border:1px solid var(--line);
+    display:flex;flex-direction:column;
+    padding:36px 30px;
+    background:var(--bg);
+    box-shadow:0 1px 0 rgba(255,255,255,0.03) inset;
+  }
+  .cube-face.face-front{
+    justify-content:center;align-items:center;text-align:center;
+    background:linear-gradient(150deg,var(--bg) 0%, var(--bg-alt) 100%);
+  }
+  .cube-face.face-back{
+    transform:rotateY(180deg);
+    -webkit-transform:rotateY(180deg);
+    justify-content:center;
+    background:var(--bg-alt);border-color:var(--accent);
+  }
   .service-num{
-    font-family:'Cormorant Garamond',serif;font-size:0.9rem;color:var(--accent);letter-spacing:0.2em;margin-bottom:24px;display:block;
-    transform:translateZ(20px);
+    font-family:'Cormorant Garamond',serif;font-size:0.85rem;color:var(--accent);letter-spacing:0.2em;margin-bottom:18px;display:block;
   }
-  .service-card h3{font-size:1.6rem;margin-bottom:14px;}
-  .service-card p{color:var(--text-dim);font-size:0.95rem;}
+  .cube-face.face-front h3{font-size:1.5rem;}
+  .cube-back-tag{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:block;}
+  .cube-face.face-back p{color:var(--text-dim);font-size:0.92rem;}
+  .cube-hint{
+    margin-top:18px;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);
+    opacity:0.6;
+  }
 
-  /* ===== PRICING ===== */
+  /* ===== PRICING (INTERACTIVE CARDS) ===== */
   .pricing-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:24px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:28px;
+  }
+  .price-wrap{
+    perspective:1000px;
   }
   .price-card{
-    border:1px solid var(--line);padding:48px 36px;
+    border:1px solid var(--line);padding:48px 36px;border-radius:14px;
     display:flex;flex-direction:column;
     transition:border-color 0.3s ease, transform 0.15s ease-out, box-shadow 0.3s ease;
     position:relative;background:var(--bg);
+    overflow:hidden;
   }
   .price-card:hover{border-color:var(--accent);box-shadow:0 40px 70px -25px rgba(0,0,0,0.65);}
   .price-card.featured{
@@ -282,17 +433,16 @@
   }
   .price-card.featured::before{
     content:'Most Booked';
-    position:absolute;top:-1px;right:24px;
+    position:absolute;top:0;right:24px;transform:translateZ(30px);
     background:var(--accent);color:var(--bg);
     font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;
-    padding:6px 14px;
-    transform:translateZ(30px);
+    padding:6px 14px;white-space:nowrap;border-radius:0 0 6px 6px;
   }
   .price-tier{font-size:0.8rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;}
   .price-card h3{font-size:1.8rem;margin-bottom:8px;}
   .price-amount{font-family:'Cormorant Garamond',serif;font-size:2.6rem;margin:20px 0;}
   .price-amount span{font-size:1rem;color:var(--text-dim);font-family:'Jost',sans-serif;}
-  .price-card ul{list-style:none;margin:24px 0;flex-grow:1;}
+  .price-card ul{list-style:none;margin:20px 0;flex-grow:1;}
   .price-card li{
     padding:10px 0;border-top:1px solid var(--line);
     color:var(--text-dim);font-size:0.92rem;
@@ -314,8 +464,9 @@
     display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:center;
   }
   .about-img{
-    aspect-ratio:3/4;background:var(--bg-alt);overflow:hidden;
-    transition:box-shadow 0.3s ease;
+    aspect-ratio:1/1;background:var(--bg-alt);overflow:hidden;
+    transition:box-shadow 0.3s ease;border-radius:50%;
+    max-width:380px;margin:0 auto;
   }
   .about-img:hover{box-shadow:0 40px 80px -30px rgba(0,0,0,0.7);}
   .about-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(20%);transition:transform 0.4s ease;}
@@ -324,6 +475,46 @@
   .stats-row{display:flex;gap:48px;margin-top:40px;flex-wrap:wrap;}
   .stat strong{display:block;font-family:'Cormorant Garamond',serif;font-size:2.4rem;color:var(--accent);}
   .stat span{font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-dim);}
+
+  /* ===== RECOGNITION ===== */
+  .recognition-grid{
+    display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center;
+  }
+  .recognition-photo-wrap{
+    perspective:1000px;
+  }
+  .recognition-photo{
+    position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;
+    max-width:420px;margin:0 auto;
+    transition:transform 0.15s ease-out, box-shadow 0.4s ease;
+    box-shadow:0 25px 60px -20px rgba(0,0,0,0.6);
+  }
+  .recognition-photo .tilt-glare{border-radius:6px;}
+  .recognition-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(10%) brightness(0.96);}
+  .recognition-photo:hover{box-shadow:0 45px 90px -25px rgba(0,0,0,0.75);}
+  .recognition-caption{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:30px 28px;
+    background:linear-gradient(to top, rgba(0,0,0,0.85), transparent 80%);
+  }
+  .recognition-caption .tag{font-size:0.7rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;display:block;}
+  .recognition-caption h4{font-size:1.3rem;}
+  .recognition-content .label{display:block;margin-bottom:14px;}
+  .recognition-content > p{color:var(--text-dim);margin-bottom:28px;font-size:1.02rem;}
+  .recognition-credentials{display:flex;flex-direction:column;gap:18px;}
+  .credential-item{
+    display:flex;gap:18px;align-items:flex-start;
+    padding:20px;border:1px solid var(--line);border-radius:10px;
+    transition:border-color 0.3s ease, transform 0.15s ease-out, box-shadow 0.3s ease;
+  }
+  .credential-item:hover{border-color:var(--accent);box-shadow:0 20px 40px -20px rgba(0,0,0,0.5);}
+  .credential-icon{
+    width:42px;height:42px;border-radius:50%;flex-shrink:0;
+    border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--accent);
+  }
+  .credential-text h4{font-size:1.1rem;margin-bottom:4px;}
+  .credential-text p{color:var(--text-dim);font-size:0.9rem;margin:0;}
 
   /* ===== CONTACT ===== */
   .contact-wrap{
@@ -379,7 +570,7 @@
     }
     .nav-links.open{right:0;}
     .nav-toggle{display:block;}
-    .about-grid, .contact-wrap{grid-template-columns:1fr;}
+    .about-grid, .contact-wrap, .recognition-grid{grid-template-columns:1fr;}
     .form-row{grid-template-columns:1fr;}
     .about-img{order:-1;max-width:320px;}
     section{padding:80px 6%;}
@@ -395,6 +586,7 @@
     <a href="#services">Services</a>
     <a href="#pricing">Pricing</a>
     <a href="#about">About</a>
+    <a href="#recognition">Recognition</a>
     <a href="#contact">Contact</a>
   </div>
   <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">☰</button>
@@ -406,10 +598,28 @@
     <div class="hero-3d-layer hero-layer-bg" id="heroLayerBg"></div>
   </div>
   <div class="hero-grain"></div>
-  <div class="photo-stack" id="photoStack">
-    <div class="photo-stack-card"><img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=600&auto=format&fit=crop" alt="Portrait"></div>
-    <div class="photo-stack-card"><img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=600&auto=format&fit=crop" alt="Travel"></div>
-    <div class="photo-stack-card"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=600&auto=format&fit=crop" alt="Candid"></div>
+  <div class="camera-stage" id="cameraStage">
+    <div class="camera-3d" id="camera3d">
+      <div class="cam-shadow"></div>
+      <div class="cam-part cam-body">
+        <div class="cam-face back"></div>
+        <div class="cam-face left"></div>
+        <div class="cam-face right"></div>
+        <div class="cam-face top"></div>
+        <div class="cam-face bottom"></div>
+        <div class="cam-face front"></div>
+        <div class="cam-part cam-grip"></div>
+        <div class="cam-part cam-dial d1"></div>
+        <div class="cam-part cam-dial d2"></div>
+        <div class="cam-part cam-viewfinder"></div>
+      </div>
+      <div class="cam-part cam-lens">
+        <div class="lens-ring r1"></div>
+        <div class="lens-ring r2"></div>
+        <div class="lens-ring r3"></div>
+        <div class="lens-glass"></div>
+      </div>
+    </div>
   </div>
   <div class="hero-content">
     <span class="hero-eyebrow">Hyderabad · Freelance Photographer</span>
@@ -443,50 +653,59 @@
   </div>
 
   <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-item tilt" data-cat="portrait">
-      <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=800&auto=format&fit=crop" alt="Portrait">
-      <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Quiet Gaze</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="portrait">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=800&auto=format&fit=crop" alt="Portrait">
+        <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Quiet Gaze</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="travel">
-      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=800&auto=format&fit=crop" alt="Travel">
-      <div class="gallery-overlay"><span class="tag">Travel</span><h4>Hampi at Dawn</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="travel">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=800&auto=format&fit=crop" alt="Travel">
+        <div class="gallery-overlay"><span class="tag">Travel</span><h4>Hampi at Dawn</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="candid">
-      <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=800&auto=format&fit=crop" alt="Candid">
-      <div class="gallery-overlay"><span class="tag">Candid</span><h4>Unrehearsed</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="candid">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=800&auto=format&fit=crop" alt="Candid">
+        <div class="gallery-overlay"><span class="tag">Candid</span><h4>Unrehearsed</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="event">
-      <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop" alt="Event">
-      <div class="gallery-overlay"><span class="tag">Event</span><h4>The Reception</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="event">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop" alt="Event">
+        <div class="gallery-overlay"><span class="tag">Event</span><h4>The Reception</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="portrait">
-      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Portrait">
-      <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Window Light</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="portrait">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Portrait">
+        <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Window Light</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="travel">
-      <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=800&auto=format&fit=crop" alt="Travel">
-      <div class="gallery-overlay"><span class="tag">Travel</span><h4>Backwater Mist</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="travel">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=800&auto=format&fit=crop" alt="Travel">
+        <div class="gallery-overlay"><span class="tag">Travel</span><h4>Backwater Mist</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="candid">
-      <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop" alt="Candid">
-      <div class="gallery-overlay"><span class="tag">Candid</span><h4>Street Frame</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="candid">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop" alt="Candid">
+        <div class="gallery-overlay"><span class="tag">Candid</span><h4>Street Frame</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="event">
-      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="Event">
-      <div class="gallery-overlay"><span class="tag">Event</span><h4>First Dance</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="event">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="Event">
+        <div class="gallery-overlay"><span class="tag">Event</span><h4>First Dance</h4></div>
+      </div>
     </div>
-    <div class="gallery-item tilt" data-cat="portrait">
-      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop" alt="Portrait">
-      <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Soft Focus</h4></div>
-      <div class="tilt-glare"></div>
+    <div class="ball-wrap" data-cat="portrait">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop" alt="Portrait">
+        <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Soft Focus</h4></div>
+      </div>
     </div>
   </div>
 </section>
@@ -501,29 +720,57 @@
     <p>From intimate portrait sessions to full-day event coverage — tailored to how you want to be remembered.</p>
   </div>
   <div class="services-grid">
-    <div class="service-card tilt">
-      <span class="service-num">01</span>
-      <h3>Portrait Sessions</h3>
-      <p>Studio or natural light portraits — individual, couple, or professional headshots with a focus on natural expression.</p>
-      <div class="tilt-glare"></div>
+    <div class="cube-wrap">
+      <div class="cube">
+        <div class="cube-face face-front">
+          <span class="service-num">01</span>
+          <h3>Portrait Sessions</h3>
+          <span class="cube-hint">Hover to read more</span>
+        </div>
+        <div class="cube-face face-back">
+          <span class="cube-back-tag">What's Included</span>
+          <p>Studio or natural light portraits — individual, couple, or professional headshots with a focus on natural expression.</p>
+        </div>
+      </div>
     </div>
-    <div class="service-card tilt">
-      <span class="service-num">02</span>
-      <h3>Travel Photography</h3>
-      <p>Documentary-style coverage of places and journeys, capturing texture, light and the feeling of being there.</p>
-      <div class="tilt-glare"></div>
+    <div class="cube-wrap">
+      <div class="cube">
+        <div class="cube-face face-front">
+          <span class="service-num">02</span>
+          <h3>Travel Photography</h3>
+          <span class="cube-hint">Hover to read more</span>
+        </div>
+        <div class="cube-face face-back">
+          <span class="cube-back-tag">What's Included</span>
+          <p>Documentary-style coverage of places and journeys, capturing texture, light and the feeling of being there.</p>
+        </div>
+      </div>
     </div>
-    <div class="service-card tilt">
-      <span class="service-num">03</span>
-      <h3>Candid Coverage</h3>
-      <p>Unposed, observational photography for personal projects, lifestyle shoots, and editorial work.</p>
-      <div class="tilt-glare"></div>
+    <div class="cube-wrap">
+      <div class="cube">
+        <div class="cube-face face-front">
+          <span class="service-num">03</span>
+          <h3>Candid Coverage</h3>
+          <span class="cube-hint">Hover to read more</span>
+        </div>
+        <div class="cube-face face-back">
+          <span class="cube-back-tag">What's Included</span>
+          <p>Unposed, observational photography for personal projects, lifestyle shoots, and editorial work.</p>
+        </div>
+      </div>
     </div>
-    <div class="service-card tilt">
-      <span class="service-num">04</span>
-      <h3>Event Photography</h3>
-      <p>Weddings, engagements, corporate functions and celebrations — full-day coverage with edited highlights.</p>
-      <div class="tilt-glare"></div>
+    <div class="cube-wrap">
+      <div class="cube">
+        <div class="cube-face face-front">
+          <span class="service-num">04</span>
+          <h3>Event Photography</h3>
+          <span class="cube-hint">Hover to read more</span>
+        </div>
+        <div class="cube-face face-back">
+          <span class="cube-back-tag">What's Included</span>
+          <p>Weddings, engagements, corporate functions and celebrations — full-day coverage with edited highlights.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -539,49 +786,55 @@
     <p>Straightforward pricing in INR. Custom packages available on request for multi-day or destination shoots.</p>
   </div>
   <div class="pricing-grid">
-    <div class="price-card tilt">
-      <span class="price-tier">Essential</span>
-      <h3>Portrait Session</h3>
-      <div class="price-amount">₹3,500 <span>/ session</span></div>
-      <ul>
-        <li>1–2 hour session</li>
-        <li>One location</li>
-        <li>25+ edited photos</li>
-        <li>Online gallery delivery</li>
-        <li>7-day turnaround</li>
-      </ul>
-      <a href="#contact" class="price-cta">Book This</a>
-      <div class="tilt-glare"></div>
+    <div class="price-wrap">
+      <div class="price-card tilt">
+        <span class="price-tier">Essential</span>
+        <h3>Portrait Session</h3>
+        <div class="price-amount">₹3,500 <span>/ session</span></div>
+        <ul>
+          <li>1–2 hour session</li>
+          <li>One location</li>
+          <li>25+ edited photos</li>
+          <li>Online gallery delivery</li>
+          <li>7-day turnaround</li>
+        </ul>
+        <a href="#contact" class="price-cta">Book This</a>
+        <div class="tilt-glare"></div>
+      </div>
     </div>
-    <div class="price-card featured tilt">
-      <span class="price-tier">Signature</span>
-      <h3>Half-Day Coverage</h3>
-      <div class="price-amount">₹10,000 <span>/ shoot</span></div>
-      <ul>
-        <li>Up to 4 hours coverage</li>
-        <li>Multiple locations</li>
-        <li>75+ edited photos</li>
-        <li>Online gallery + downloads</li>
-        <li>5-day turnaround</li>
-        <li>Travel within Hyderabad included</li>
-      </ul>
-      <a href="#contact" class="price-cta">Book This</a>
-      <div class="tilt-glare"></div>
+    <div class="price-wrap">
+      <div class="price-card featured tilt">
+        <span class="price-tier">Signature</span>
+        <h3>Half-Day Coverage</h3>
+        <div class="price-amount">₹10,000 <span>/ shoot</span></div>
+        <ul>
+          <li>Up to 4 hours coverage</li>
+          <li>Multiple locations</li>
+          <li>75+ edited photos</li>
+          <li>Online gallery + downloads</li>
+          <li>5-day turnaround</li>
+          <li>Travel within Hyderabad included</li>
+        </ul>
+        <a href="#contact" class="price-cta">Book This</a>
+        <div class="tilt-glare"></div>
+      </div>
     </div>
-    <div class="price-card tilt">
-      <span class="price-tier">Complete</span>
-      <h3>Full-Day Event</h3>
-      <div class="price-amount">₹25,000 <span>/ day</span></div>
-      <ul>
-        <li>Up to 8 hours coverage</li>
-        <li>Full event documentation</li>
-        <li>150+ edited photos</li>
-        <li>Highlight reel selection</li>
-        <li>10-day turnaround</li>
-        <li>Second shooter on request</li>
-      </ul>
-      <a href="#contact" class="price-cta">Book This</a>
-      <div class="tilt-glare"></div>
+    <div class="price-wrap">
+      <div class="price-card tilt">
+        <span class="price-tier">Complete</span>
+        <h3>Full-Day Event</h3>
+        <div class="price-amount">₹25,000 <span>/ day</span></div>
+        <ul>
+          <li>Up to 8 hours coverage</li>
+          <li>Full event documentation</li>
+          <li>150+ edited photos</li>
+          <li>Highlight reel selection</li>
+          <li>10-day turnaround</li>
+          <li>Second shooter on request</li>
+        </ul>
+        <a href="#contact" class="price-cta">Book This</a>
+        <div class="tilt-glare"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -594,6 +847,29 @@
       <div class="about-img">
         <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?q=80&w=800&auto=format&fit=crop" alt="Prem Jedidiah Thella">
       </div>
+      <div class="about-cam-stage" id="aboutCamStage">
+        <div class="about-cam-3d" id="aboutCam3d">
+          <div class="cam-shadow"></div>
+          <div class="cam-part cam-body">
+            <div class="cam-face back"></div>
+            <div class="cam-face left"></div>
+            <div class="cam-face right"></div>
+            <div class="cam-face top"></div>
+            <div class="cam-face bottom"></div>
+            <div class="cam-face front"></div>
+            <div class="cam-part cam-grip"></div>
+            <div class="cam-part cam-dial d1"></div>
+            <div class="cam-part cam-dial d2"></div>
+            <div class="cam-part cam-viewfinder"></div>
+          </div>
+          <div class="cam-part cam-lens">
+            <div class="lens-ring r1"></div>
+            <div class="lens-ring r2"></div>
+            <div class="lens-ring r3"></div>
+            <div class="lens-glass"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="about-content">
       <span class="label">About</span>
@@ -604,6 +880,57 @@
         <div class="stat"><strong>6+</strong><span>Years Shooting</span></div>
         <div class="stat"><strong>200+</strong><span>Projects</span></div>
         <div class="stat"><strong>2</strong><span>Communities Led</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECOGNITION -->
+<section id="recognition">
+  <div class="section-head">
+    <div class="accent-ring"></div>
+    <div>
+      <span class="label">Recognition</span>
+      <h2>Behind The Lens</h2>
+    </div>
+    <p>A glimpse at the person doing the work — on set, in the field, and within the photography community.</p>
+  </div>
+  <div class="recognition-grid">
+    <div class="recognition-photo-wrap">
+      <div class="recognition-photo tilt">
+        <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=900&auto=format&fit=crop" alt="Prem Jedidiah Thella at work">
+        <div class="recognition-caption">
+          <span class="tag">On Assignment</span>
+          <h4>Prem Jedidiah Thella</h4>
+        </div>
+        <div class="tilt-glare"></div>
+      </div>
+    </div>
+    <div class="recognition-content">
+      <span class="label">Recognised Within The Craft</span>
+      <p>Six years of consistent work across portrait, travel, candid and event photography has led to recognition not just from clients, but from the photography community itself — through leadership roles, mentorship, and collaborative projects.</p>
+      <div class="recognition-credentials">
+        <div class="credential-item tilt">
+          <div class="credential-icon">K</div>
+          <div class="credential-text">
+            <h4>KL Samyak — Leadership Role</h4>
+            <p>Held a leadership position within the KL Samyak photography community, contributing to collaborative shoots and peer mentorship.</p>
+          </div>
+        </div>
+        <div class="credential-item tilt">
+          <div class="credential-icon">S</div>
+          <div class="credential-text">
+            <h4>Surabhi — Leadership Role</h4>
+            <p>Led initiatives within the Surabhi photography community, helping organise events and guide emerging photographers.</p>
+          </div>
+        </div>
+        <div class="credential-item tilt">
+          <div class="credential-icon">6+</div>
+          <div class="credential-text">
+            <h4>Six Years Behind The Lens</h4>
+            <p>A consistent body of work across 200+ sessions spanning portrait, travel, candid and event photography.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -695,7 +1022,7 @@
 
   // Gallery filter
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const galleryItems = document.querySelectorAll('.gallery-item');
+  const galleryItems = document.querySelectorAll('.ball-wrap');
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
@@ -704,6 +1031,65 @@
       galleryItems.forEach(item => {
         item.classList.toggle('hidden', filter !== 'all' && item.dataset.cat !== filter);
       });
+    });
+  });
+
+  // ===== BOUNCING BALL PHYSICS (gallery) =====
+  const ballReduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!ballReduceMotion) {
+    document.querySelectorAll('.ball-wrap .gallery-item').forEach((ball, idx) => {
+      let velocity = 0;
+      let posY = 0;
+      let bouncing = false;
+      let rafId = null;
+      const gravity = 0.9;
+      const damping = 0.62;
+      const settleThreshold = 0.6;
+
+      const idleDelay = idx * 220;
+      let idleTimer = setTimeout(() => triggerBounce(-14, 1), idleDelay);
+
+      function step() {
+        velocity += gravity;
+        posY += velocity;
+        if (posY >= 0) {
+          posY = 0;
+          velocity *= -damping;
+          if (Math.abs(velocity) < settleThreshold) {
+            velocity = 0;
+            bouncing = false;
+            ball.style.transform = '';
+            ball.classList.remove('bouncing');
+            cancelAnimationFrame(rafId);
+            return;
+          }
+        }
+        const squash = 1 + Math.min(Math.abs(velocity) / 60, 0.12) * (posY >= -1 ? 1 : -0.4);
+        ball.style.transform = `translateY(${posY}px) scaleY(${posY >= -1 ? (2-squash) : squash}) scaleX(${posY >= -1 ? squash : (2-squash)})`;
+        rafId = requestAnimationFrame(step);
+      }
+
+      function triggerBounce(initialVel, power) {
+        if (bouncing) return;
+        bouncing = true;
+        ball.classList.add('bouncing');
+        velocity = initialVel * power;
+        posY = 0;
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(step);
+      }
+
+      ball.addEventListener('click', () => triggerBounce(-26, 1));
+      ball.addEventListener('mouseenter', () => { if (!bouncing) triggerBounce(-10, 1); });
+    });
+  }
+
+  // ===== CUBE FLIP (touch fallback) =====
+  document.querySelectorAll('.cube-wrap').forEach(wrap => {
+    wrap.addEventListener('click', () => {
+      if (!window.matchMedia('(hover: hover)').matches) {
+        wrap.classList.toggle('flipped');
+      }
     });
   });
 
@@ -731,13 +1117,8 @@
     const heroEl = document.getElementById('hero3d');
     const heroStage = document.getElementById('heroStage');
     const heroContent = document.querySelector('.hero-content');
-    const photoStack = document.getElementById('photoStack');
-    const stackCards = photoStack ? photoStack.querySelectorAll('.photo-stack-card') : [];
-    const stackBase = [
-      {z:0, x:0, y:0, r:0},
-      {z:-50, x:34, y:-26, r:4},
-      {z:-100, x:-30, y:40, r:-3}
-    ];
+    const camera3d = document.getElementById('camera3d');
+    const baseRotX = 8, baseRotY = -18;
     if (heroEl && heroStage) {
       heroEl.addEventListener('mousemove', (e) => {
         const rect = heroEl.getBoundingClientRect();
@@ -747,19 +1128,46 @@
         if (heroContent) {
           heroContent.style.transform = `translateX(${-x * 14}px) translateY(${-y * 10}px)`;
         }
-        stackCards.forEach((card, i) => {
-          const depth = (i + 1) * 14;
-          const b = stackBase[i];
-          card.style.transform = `translateZ(${b.z}px) translateX(${b.x + x * depth}px) translateY(${b.y - y * depth}px) rotate(${b.r}deg)`;
-        });
+        if (camera3d) {
+          camera3d.style.animationPlayState = 'paused';
+          camera3d.style.transform = `translateY(${-y * 10}px) rotateX(${baseRotX - y * 16}deg) rotateY(${baseRotY + x * 28}deg)`;
+        }
       });
       heroEl.addEventListener('mouseleave', () => {
         heroStage.style.transform = 'rotateY(0deg) rotateX(0deg)';
         if (heroContent) heroContent.style.transform = 'translateX(0) translateY(0)';
-        stackCards.forEach((card, i) => {
-          const b = stackBase[i];
-          card.style.transform = `translateZ(${b.z}px) translateX(${b.x}px) translateY(${b.y}px) rotate(${b.r}deg)`;
-        });
+        if (camera3d) {
+          camera3d.style.transform = '';
+          camera3d.style.animationPlayState = 'running';
+        }
+      });
+    }
+
+    // ===== ABOUT SECTION CAMERA BADGE (interactive) =====
+    const aboutCamStage = document.getElementById('aboutCamStage');
+    const aboutCam3d = document.getElementById('aboutCam3d');
+    if (aboutCamStage && aboutCam3d) {
+      const camScale = 0.42;
+      aboutCamStage.addEventListener('mousemove', (e) => {
+        const rect = aboutCamStage.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        aboutCam3d.style.animationPlayState = 'paused';
+        aboutCam3d.style.transform = `scale(${camScale}) rotateX(${8 - y * 30}deg) rotateY(${-18 + x * 50}deg)`;
+      });
+      aboutCamStage.addEventListener('mouseleave', () => {
+        aboutCam3d.style.transform = '';
+        aboutCam3d.style.animationPlayState = 'running';
+      });
+      aboutCamStage.addEventListener('click', () => {
+        aboutCam3d.style.animationPlayState = 'paused';
+        aboutCam3d.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        aboutCam3d.style.transform = `scale(${camScale}) rotateX(8deg) rotateY(${-18 + 360}deg)`;
+        setTimeout(() => {
+          aboutCam3d.style.transition = 'transform 0.2s ease-out';
+          aboutCam3d.style.transform = '';
+          aboutCam3d.style.animationPlayState = 'running';
+        }, 650);
       });
     }
   }
