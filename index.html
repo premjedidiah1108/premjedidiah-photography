@@ -527,7 +527,7 @@
   </div>
 </header>
 
-<!-- GALLERY -->
+<!-- WORK / PORTFOLIO TEASER -->
 <section id="work">
   <div class="section-head">
     <div class="accent-ring"></div>
@@ -535,72 +535,47 @@
       <span class="label">Selected Work</span>
       <h2>The Portfolio</h2>
     </div>
-    <p>A curated collection across portrait, travel, candid and event photography — each frame chosen for what it doesn't say out loud.</p>
+    <p>Four disciplines, six years, one consistent eye — step into the full collection.</p>
   </div>
 
-  <div class="filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="portrait">Portrait</button>
-    <button class="filter-btn" data-filter="travel">Travel</button>
-    <button class="filter-btn" data-filter="candid">Candid</button>
-    <button class="filter-btn" data-filter="event">Event</button>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2px;margin-bottom:48px;">
+
+    <a href="gallery.html#portraits" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+      <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=600&auto=format&fit=crop" alt="Portraits" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;transition:background 0.4s ease;">
+        <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">01</span>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#ece8e2;">Portraits</h3>
+      </div>
+    </a>
+
+    <a href="gallery.html#travel" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=600&auto=format&fit=crop" alt="Travel" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;">
+        <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">02</span>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#ece8e2;">Travel</h3>
+      </div>
+    </a>
+
+    <a href="gallery.html#candid" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+      <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=600&auto=format&fit=crop" alt="Candid" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;">
+        <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">03</span>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#ece8e2;">Candid</h3>
+      </div>
+    </a>
+
+    <a href="gallery.html#events" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+      <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=600&auto=format&fit=crop" alt="Events" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;">
+        <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">04</span>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:#ece8e2;">Events</h3>
+      </div>
+    </a>
+
   </div>
 
-  <div class="gallery-grid" id="galleryGrid">
-    <div class="ball-wrap" data-cat="portrait">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=800&auto=format&fit=crop" alt="Portrait">
-        <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Quiet Gaze</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="travel">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=800&auto=format&fit=crop" alt="Travel">
-        <div class="gallery-overlay"><span class="tag">Travel</span><h4>Hampi at Dawn</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="candid">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=800&auto=format&fit=crop" alt="Candid">
-        <div class="gallery-overlay"><span class="tag">Candid</span><h4>Unrehearsed</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="event">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop" alt="Event">
-        <div class="gallery-overlay"><span class="tag">Event</span><h4>The Reception</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="portrait">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Portrait">
-        <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Window Light</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="travel">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?q=80&w=800&auto=format&fit=crop" alt="Travel">
-        <div class="gallery-overlay"><span class="tag">Travel</span><h4>Backwater Mist</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="candid">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=800&auto=format&fit=crop" alt="Candid">
-        <div class="gallery-overlay"><span class="tag">Candid</span><h4>Street Frame</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="event">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" alt="Event">
-        <div class="gallery-overlay"><span class="tag">Event</span><h4>First Dance</h4></div>
-      </div>
-    </div>
-    <div class="ball-wrap" data-cat="portrait">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=800&auto=format&fit=crop" alt="Portrait">
-        <div class="gallery-overlay"><span class="tag">Portrait</span><h4>Soft Focus</h4></div>
-      </div>
-    </div>
+  <div style="text-align:center;">
+    <a href="gallery.html" style="display:inline-block;border:1px solid var(--accent);color:var(--accent);padding:16px 48px;font-size:0.85rem;letter-spacing:0.25em;text-transform:uppercase;transition:all 0.3s ease;" onmouseover="this.style.background='var(--accent)';this.style.color='var(--bg)'" onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">Browse the Full Gallery →</a>
   </div>
 </section>
 
@@ -904,6 +879,19 @@
     }
     animateGlow();
   }
+
+  // Portfolio card hover effects
+  document.querySelectorAll('#work a[href]').forEach(card => {
+    const img = card.querySelector('img');
+    card.addEventListener('mouseenter', () => {
+      if(img) img.style.cssText += 'transform:scale(1.05);filter:grayscale(0%) brightness(0.9);';
+      card.style.boxShadow = '0 0 48px 10px rgba(201,162,106,0.72)';
+    });
+    card.addEventListener('mouseleave', () => {
+      if(img) img.style.cssText += 'transform:scale(1);filter:grayscale(20%) brightness(0.75);';
+      card.style.boxShadow = 'none';
+    });
+  });
 
   // Navbar background on scroll
   const navbar = document.getElementById('navbar');
