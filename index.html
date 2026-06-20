@@ -422,6 +422,17 @@
   .testimonial-author-info strong{display:block;font-size:0.95rem;font-weight:500;}
   .testimonial-author-info span{font-size:0.78rem;color:var(--text-dim);letter-spacing:0.05em;}
 
+  /* ===== PORTFOLIO TEASER TILES ===== */
+  .portfolio-tile{
+    border:1px solid var(--line);border-radius:8px;
+    transition:border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .portfolio-tile:hover{
+    border-color:var(--accent);
+    box-shadow:0 0 40px 8px rgba(201,162,106,0.70);
+    transform:translateY(-4px);
+  }
+
   /* ===== ABOUT ===== */
   .about-grid{
     display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:center;
@@ -588,7 +599,7 @@
 
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:30px;margin-bottom:48px;max-width:880px;margin-left:auto;margin-right:auto;">
 
-    <a href="gallery.html#portraits" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+    <a href="gallery.html#portraits" class="portfolio-tile" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
       <img src="https://images.unsplash.com/photo-1521119989659-a83eee488004?q=80&w=600&auto=format&fit=crop" alt="Portraits" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;transition:background 0.4s ease;">
         <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">01</span>
@@ -596,7 +607,7 @@
       </div>
     </a>
 
-    <a href="gallery.html#travel" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+    <a href="gallery.html#travel" class="portfolio-tile" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
       <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=600&auto=format&fit=crop" alt="Travel" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;">
         <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">02</span>
@@ -604,7 +615,7 @@
       </div>
     </a>
 
-    <a href="gallery.html#candid" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+    <a href="gallery.html#candid" class="portfolio-tile" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
       <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?q=80&w=600&auto=format&fit=crop" alt="Candid" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;">
         <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">03</span>
@@ -612,7 +623,7 @@
       </div>
     </a>
 
-    <a href="gallery.html#events" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
+    <a href="gallery.html#events" class="portfolio-tile" style="position:relative;aspect-ratio:3/4;overflow:hidden;display:block;cursor:pointer;text-decoration:none;">
       <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=600&auto=format&fit=crop" alt="Events" style="width:100%;height:100%;object-fit:cover;filter:grayscale(20%) brightness(0.75);transition:transform 0.5s ease,filter 0.5s ease;">
       <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.8) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:24px;">
         <span style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">04</span>
@@ -958,16 +969,14 @@
     animateGlow();
   }
 
-  // Portfolio card hover effects
-  document.querySelectorAll('#work a[href]').forEach(card => {
+  // Portfolio card hover effects (image zoom only — border/glow handled by .portfolio-tile CSS)
+  document.querySelectorAll('#work a.portfolio-tile').forEach(card => {
     const img = card.querySelector('img');
     card.addEventListener('mouseenter', () => {
       if(img) img.style.cssText += 'transform:scale(1.05);filter:grayscale(0%) brightness(0.9);';
-      card.style.boxShadow = '0 0 48px 10px rgba(201,162,106,0.72)';
     });
     card.addEventListener('mouseleave', () => {
       if(img) img.style.cssText += 'transform:scale(1);filter:grayscale(20%) brightness(0.75);';
-      card.style.boxShadow = 'none';
     });
   });
 
